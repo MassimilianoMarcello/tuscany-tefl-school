@@ -1,15 +1,16 @@
 // lib/validations/password.ts
-import { z } from "zod"
+// ✅ Zod v4: import da "zod/v4" — migrabile incrementalmente senza toccare il resto
+import * as z from "zod/v4"
 
 export const passwordSchema = z
   .string()
-  .min(8, "Minimo 8 caratteri")
+  .min(8, { error: "Minimo 8 caratteri" })
   .refine((val) => /[A-Z]/.test(val), {
-    message: "Almeno una lettera maiuscola",
+    error: "Almeno una lettera maiuscola",
   })
   .refine((val) => /[0-9]/.test(val), {
-    message: "Almeno un numero",
+    error: "Almeno un numero",
   })
   .refine((val) => /[^A-Za-z0-9]/.test(val), {
-    message: "Almeno un simbolo (es. !@#$%)",
+    error: "Almeno un simbolo (es. !@#$%)",
   })
