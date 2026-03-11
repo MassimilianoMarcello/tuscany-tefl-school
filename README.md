@@ -18,6 +18,7 @@ A complete redesign of a real TEFL school's legacy website. The goal is to impro
 | UI | shadcn/ui + Tailwind CSS | Accessible components, lives in the codebase |
 | Validation | Zod v4 | Shared schemas between client and server |
 | Server Actions | next-safe-action | Typed actions, centralized error handling |
+| Email | Resend | Transactional emails for verification and password reset |
 | Payments | Stripe (planned) | Webhook-based enrollment confirmation |
 
 ---
@@ -48,10 +49,21 @@ Better Auth solves both: session management is handled by the library with expli
 
 ---
 
+## Technical Challenges
+
+**Session cookies not set in Server Actions** — Better Auth requires a `nextCookies()` plugin to correctly set session cookies when called from Next.js Server Actions. Without it, login and register appeared to succeed but no session was created, leaving the user in a logged-out state. Resolved by adding the plugin to `lib/auth.ts` and removing manual headers forwarding from every action.
+
+**Email verification silently not triggering** — `sendVerificationEmail` was never being called despite the config appearing correct. Root cause was two issues combined: using `await` instead of `void` on the Resend call (Better Auth does not expect the email function to block), and using a custom sender domain that had not been verified on Resend. Resolved by switching to `void` and using `onboarding@resend.dev` for development.
+
+**Zod schema duplication** — `registerSchema` and `loginSchema` were defined twice — once in the form and once in the server action. A change to a validation rule required updating both files. Resolved by centralizing all schemas in `lib/validations/auth.ts` and importing from there.
+
+---
+
 ## Current Status
 
 ### ✅ Done
 - Authentication — register, login, logout with Better Auth
+- Email verification with Resend — including resend and expired token handling
 - Password validation with real-time requirements UI
 - Session management via `nextCookies()` plugin
 - Dashboard layout with shadcn/ui Sidebar
@@ -59,7 +71,6 @@ Better Auth solves both: session management is handled by the library with expli
 - Prisma schema with all Better Auth models
 
 ### 🚧 In Progress
-- Email verification after registration
 - Forgot password / reset password flow
 - Route protection middleware
 
@@ -81,7 +92,7 @@ pnpm install
 
 # Set up environment variables
 cp .env.example .env.local
-# Fill in: DATABASE_URL, BETTER_AUTH_SECRET, NEXT_PUBLIC_BASE_URL
+# Fill in: DATABASE_URL, BETTER_AUTH_SECRET, NEXT_PUBLIC_BASE_URL, RESEND_API_KEY
 
 # Set up the database
 npx prisma migrate dev
@@ -98,6 +109,7 @@ pnpm dev
 This project solves real business problems for a real client:
 
 - **Evaluated two auth solutions** and made a documented technical decision based on concrete problems encountered, not preference
+- **Debugged non-obvious issues** — session cookies in Server Actions, email verification timing — by reading source code and documentation rather than guessing
 - **Identified a scalability issue early** (role management) and addressed it before it became expensive
 - **Separated concerns** between content (Sanity) and business logic (Prisma) so the client has autonomy without touching code
 - **Typed end-to-end** — from Zod schema to server action to form, types are inferred not written manually
