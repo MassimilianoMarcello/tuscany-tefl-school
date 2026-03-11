@@ -4,7 +4,7 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { useHookFormAction } from "@next-safe-action/adapter-react-hook-form/hooks"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { LogIn, Eye, EyeOff } from "lucide-react"
+import { LogIn, Eye, EyeOff, Loader2 } from "lucide-react"
 import { loginAction } from "@/actions/login"
 import { loginSchema } from "@/lib/validations/auth"
 import { AuthCard } from "./auth-card"
@@ -39,6 +39,19 @@ export function LoginForm() {
           router.push("/dashboard")
           router.refresh()
         },
+        // ✅ Better Auth restituisce status 403 quando l'email non è verificata.
+        //    Mandiamo l'utente a /verify-email con l'email precompilata.
+        //    Better Auth reinvia automaticamente la mail di verifica al login tentato,
+        //    quindi il parametro resent=true permette alla pagina di mostrare
+        //    un messaggio "abbiamo reinviato la mail" invece di "controlla la tua email"
+        onError: ({ error, input }) => {
+  console.log("onError chiamato:", error)
+  if (error.serverError === "EMAIL_NOT_VERIFIED") {
+    router.push(
+      `/verify-email?email=${encodeURIComponent(input.email)}&resent=true`
+    )
+  }
+},
       },
     }
   )
@@ -57,7 +70,6 @@ export function LoginForm() {
 
       <Form {...form}>
         <form onSubmit={handleSubmitWithAction} className="space-y-4">
-          {/* Email */}
           <FormField
             name="email"
             control={form.control}
@@ -72,7 +84,6 @@ export function LoginForm() {
             )}
           />
 
-          {/* Password */}
           <FormField
             name="password"
             control={form.control}
@@ -109,7 +120,14 @@ export function LoginForm() {
           />
 
           <Button type="submit" className="w-full" disabled={action.isPending}>
-            {action.isPending ? "Accesso in corso..." : "Accedi"}
+            {action.isPending ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Accesso in corso...
+              </>
+            ) : (
+              "Accedi"
+            )}
           </Button>
 
           <p className="text-center text-sm text-muted-foreground">
