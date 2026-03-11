@@ -69,7 +69,7 @@ async function onSubmit(data: RegisterFormData) {
     return
   }
 
-  router.push("/dashboard")
+  router.push("/login")
 }
 
   return (
