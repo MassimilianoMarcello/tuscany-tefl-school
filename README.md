@@ -10,7 +10,7 @@ A complete redesign of a real TEFL school's legacy website. The goal is to impro
 
 | Area | Technology | Motivation |
 |---|---|---|
-| Framework | Next.js 15 (App Router) | Server Components, Server Actions, built-in routing |
+| Framework | Next.js 16 (App Router) | Server Components, Server Actions, built-in routing |
 | Auth | Better Auth | See migration notes below |
 | Database | PostgreSQL via Neon | Serverless-ready, zero infrastructure management |
 | ORM | Prisma 7 | Type-safe queries, native Better Auth adapter |
