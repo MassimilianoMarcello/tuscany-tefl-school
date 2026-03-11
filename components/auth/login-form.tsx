@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation"
 import { useTranslations } from "next-intl"
 import { useHookFormAction } from "@next-safe-action/adapter-react-hook-form/hooks"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useLocale } from "next-intl"
 import { LogIn, Eye, EyeOff, Loader2 } from "lucide-react"
 import { loginAction } from "@/actions/login"
 import { loginSchema } from "@/lib/validations/auth"
@@ -29,6 +30,7 @@ interface LoginFormProps {
 export function LoginForm({ resetSuccess }: LoginFormProps) {
   const router = useRouter()
   const t = useTranslations("auth.login")
+  const locale = useLocale()
   const [showPassword, setShowPassword] = useState(false)
 
   const { form, action, handleSubmitWithAction } = useHookFormAction(
@@ -40,13 +42,13 @@ export function LoginForm({ resetSuccess }: LoginFormProps) {
       },
       actionProps: {
         onSuccess: () => {
-          router.push("/dashboard")
+          router.push(`/${locale}/dashboard`)
           router.refresh()
         },
         onError: ({ error, input }) => {
           if (error.serverError === "EMAIL_NOT_VERIFIED") {
             router.push(
-              `/verify-email?email=${encodeURIComponent(input.email)}&resent=true`
+              `/${locale}/verify-email?email=${encodeURIComponent(input.email)}&resent=true`
             )
           }
         },

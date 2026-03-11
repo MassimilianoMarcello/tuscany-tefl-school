@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation"
 import { useTranslations } from "next-intl"
 import { useHookFormAction } from "@next-safe-action/adapter-react-hook-form/hooks"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useLocale } from "next-intl"
 import { UserPlus, Eye, EyeOff, Loader2 } from "lucide-react"
 import { registerAction } from "@/actions/register"
 import { registerSchema } from "@/lib/validations/auth"
@@ -26,6 +27,7 @@ import { PasswordRequirements } from "./password-requirements"
 export function RegisterForm() {
   const router = useRouter()
   const t = useTranslations("auth.register")
+  const locale = useLocale()
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
@@ -38,7 +40,7 @@ export function RegisterForm() {
       },
       actionProps: {
         onSuccess: ({ input }) => {
-          router.push(`/verify-email?email=${encodeURIComponent(input.email)}`)
+          router.push(`/${locale}/verify-email?email=${encodeURIComponent(input.email)}`)
         },
       },
     }

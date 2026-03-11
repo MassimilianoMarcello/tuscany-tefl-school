@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation"
 import { useTranslations } from "next-intl"
 import { useHookFormAction } from "@next-safe-action/adapter-react-hook-form/hooks"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useLocale } from "next-intl"
 import { KeyRound, Loader2 } from "lucide-react"
 import { forgotPasswordAction } from "@/actions/forgot-password"
 import { forgotPasswordSchema } from "@/lib/validations/auth"
@@ -23,6 +24,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert"
 export function ForgotPasswordForm() {
   const router = useRouter()
   const t = useTranslations("auth.forgotPassword")
+  const locale = useLocale()
 
   const { form, action, handleSubmitWithAction } = useHookFormAction(
     forgotPasswordAction,
@@ -33,7 +35,7 @@ export function ForgotPasswordForm() {
       },
       actionProps: {
         onSuccess: ({ input }) => {
-          router.push(`/forgot-password/sent?email=${encodeURIComponent(input.email)}`)
+          router.push(`/${locale}/forgot-password/sent?email=${encodeURIComponent(input.email)}`)
         },
       },
     }

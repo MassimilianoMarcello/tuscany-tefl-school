@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation"
 import { useTranslations } from "next-intl"
 import { useHookFormAction } from "@next-safe-action/adapter-react-hook-form/hooks"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useLocale } from "next-intl"
 import { Lock, Eye, EyeOff, Loader2 } from "lucide-react"
 import { resetPasswordAction } from "@/actions/reset-password"
 import { resetPasswordSchema } from "@/lib/validations/auth"
@@ -29,6 +30,7 @@ interface ResetPasswordFormProps {
 export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
   const router = useRouter()
   const t = useTranslations("auth.resetPassword")
+  const locale = useLocale()
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
@@ -41,7 +43,7 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
       },
       actionProps: {
         onSuccess: () => {
-          router.push("/login?reset=true")
+          router.push(`/${locale}/login?reset=true`)
         },
       },
     }
