@@ -1,5 +1,6 @@
 "use client"
 
+// components/auth/login-form.tsx
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { useHookFormAction } from "@next-safe-action/adapter-react-hook-form/hooks"
@@ -8,6 +9,7 @@ import { LogIn, Eye, EyeOff, Loader2 } from "lucide-react"
 import { loginAction } from "@/actions/login"
 import { loginSchema } from "@/lib/validations/auth"
 import { AuthCard } from "./auth-card"
+import { GoogleButton } from "./google-button"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {
@@ -33,19 +35,13 @@ export function LoginForm({ resetSuccess }: LoginFormProps) {
     zodResolver(loginSchema),
     {
       formProps: {
-        defaultValues: {
-          email: "",
-          password: "",
-        },
+        defaultValues: { email: "", password: "" },
       },
       actionProps: {
         onSuccess: () => {
           router.push("/dashboard")
           router.refresh()
         },
-        // ✅ Intercetta l'errore EMAIL_NOT_VERIFIED mappato in safe-action.ts
-        //    e reindirizza a /verify-email invece di mostrare un Alert generico.
-        //    Better Auth reinvia automaticamente la mail al tentativo di login.
         onError: ({ error, input }) => {
           if (error.serverError === "EMAIL_NOT_VERIFIED") {
             router.push(
@@ -58,12 +54,8 @@ export function LoginForm({ resetSuccess }: LoginFormProps) {
   )
 
   return (
-    <AuthCard
-      title="Bentornato"
-      description="Accedi al tuo account"
-      icon={LogIn}
-    >
-      {/* ✅ Mostrato quando l'utente arriva da /login?reset=true */}
+    <AuthCard title="Bentornato" description="Accedi al tuo account" icon={LogIn}>
+      {/* Successo reset password */}
       {resetSuccess && (
         <Alert className="mb-4 border-green-500 text-green-700 bg-green-50">
           <AlertDescription>
@@ -72,16 +64,28 @@ export function LoginForm({ resetSuccess }: LoginFormProps) {
         </Alert>
       )}
 
-      {/* Errore generico server */}
+      {/* Errore server */}
       {action.result?.serverError && (
         <Alert variant="destructive" className="mb-4">
           <AlertDescription>{action.result.serverError}</AlertDescription>
         </Alert>
       )}
 
+      {/* Bottone Google */}
+      <GoogleButton label="Accedi con Google" />
+
+      {/* Separatore */}
+      <div className="relative my-4">
+        <div className="absolute inset-0 flex items-center">
+          <span className="w-full border-t" />
+        </div>
+        <div className="relative flex justify-center text-xs uppercase">
+          <span className="bg-background px-2 text-muted-foreground">oppure</span>
+        </div>
+      </div>
+
       <Form {...form}>
         <form onSubmit={handleSubmitWithAction} className="space-y-4">
-          {/* Email */}
           <FormField
             name="email"
             control={form.control}
@@ -96,7 +100,6 @@ export function LoginForm({ resetSuccess }: LoginFormProps) {
             )}
           />
 
-          {/* Password */}
           <FormField
             name="password"
             control={form.control}
@@ -123,11 +126,7 @@ export function LoginForm({ resetSuccess }: LoginFormProps) {
                       onClick={() => setShowPassword((v) => !v)}
                       className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
                     >
-                      {showPassword ? (
-                        <EyeOff className="h-4 w-4" />
-                      ) : (
-                        <Eye className="h-4 w-4" />
-                      )}
+                      {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                     </button>
                   </div>
                 </FormControl>

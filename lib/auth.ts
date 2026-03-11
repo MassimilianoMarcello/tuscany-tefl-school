@@ -13,8 +13,7 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
     requireEmailVerification: true,
-    // ✅ Better Auth chiama questa funzione quando l'utente richiede il reset
-    //    void invece di await — stesso pattern di sendVerificationEmail
+    // ✅ void invece di await — Better Auth non aspetta la risposta email
     sendResetPassword: async ({ user, url }) => {
       console.log("📧 sendResetPassword chiamata per:", user.email)
       void resend.emails.send({
@@ -52,12 +51,9 @@ export const auth = betterAuth({
     sendOnSignUp: true,
     autoSignInAfterVerification: true,
     // ✅ void invece di await — Better Auth non aspetta la risposta email
-    // ✅ token aggiunto come parametro (richiesto dalla firma corretta)
     sendVerificationEmail: async ({ user, url, token }, request) => {
       console.log("📧 sendVerificationEmail chiamata per:", user.email)
       void resend.emails.send({
-        // ✅ In sviluppo usa sempre onboarding@resend.dev
-        // In produzione sostituisci con il tuo dominio verificato su Resend
         from: "onboarding@resend.dev",
         to: user.email,
         subject: "Verifica il tuo indirizzo email",
@@ -85,6 +81,26 @@ export const auth = betterAuth({
           </div>
         `,
       })
+    },
+  },
+
+  user: {
+    additionalFields: {
+      role: {
+        type: "string",
+        required: false,
+        defaultValue: "USER",
+      },
+    },
+  },
+
+  // ✅ Google OAuth — prompt: "select_account" forza sempre la selezione account
+  //    così l'utente può scegliere tra più account Google se ne ha più di uno
+  socialProviders: {
+    google: {
+      prompt: "select_account",
+      clientId: process.env.GOOGLE_CLIENT_ID as string,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
     },
   },
 

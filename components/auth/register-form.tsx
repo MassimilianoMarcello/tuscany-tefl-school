@@ -1,13 +1,15 @@
 "use client"
 
+// components/auth/register-form.tsx
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { useHookFormAction } from "@next-safe-action/adapter-react-hook-form/hooks"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { UserPlus, Eye, EyeOff,Loader2 } from "lucide-react"
+import { UserPlus, Eye, EyeOff, Loader2 } from "lucide-react"
 import { registerAction } from "@/actions/register"
 import { registerSchema } from "@/lib/validations/auth"
 import { AuthCard } from "./auth-card"
+import { GoogleButton } from "./google-button"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {
@@ -26,13 +28,7 @@ export function RegisterForm() {
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
-  // ✅ useHookFormAction: connette safe action + RHF in un unico hook.
-  //    - Validazione client con Zod (resolver)
-  //    - Submit gestito da handleSubmitWithAction
-  //    - Errori server in action.result.serverError
-  //    - Loading in action.isPending
-  //    - Nessun useState per error/isSubmitting
-const { form, action, handleSubmitWithAction } = useHookFormAction(
+  const { form, action, handleSubmitWithAction } = useHookFormAction(
     registerAction,
     zodResolver(registerSchema),
     {
@@ -45,11 +41,9 @@ const { form, action, handleSubmitWithAction } = useHookFormAction(
         },
       },
       actionProps: {
-        // ✅ Passa l'email come query param così verify-email
-        //    può mostrare il bottone "Reinvia email"
-    onSuccess: ({ input }) => {
-  router.push(`/verify-email?email=${encodeURIComponent(input.email)}`)
-},
+        onSuccess: ({ input }) => {
+          router.push(`/verify-email?email=${encodeURIComponent(input.email)}`)
+        },
       },
     }
   )
@@ -66,9 +60,21 @@ const { form, action, handleSubmitWithAction } = useHookFormAction(
         </Alert>
       )}
 
+      {/* Bottone Google */}
+      <GoogleButton label="Registrati con Google" />
+
+      {/* Separatore */}
+      <div className="relative my-4">
+        <div className="absolute inset-0 flex items-center">
+          <span className="w-full border-t" />
+        </div>
+        <div className="relative flex justify-center text-xs uppercase">
+          <span className="bg-background px-2 text-muted-foreground">oppure</span>
+        </div>
+      </div>
+
       <Form {...form}>
         <form onSubmit={handleSubmitWithAction} className="space-y-4">
-          {/* Nome */}
           <FormField
             name="name"
             control={form.control}
@@ -83,7 +89,6 @@ const { form, action, handleSubmitWithAction } = useHookFormAction(
             )}
           />
 
-          {/* Email */}
           <FormField
             name="email"
             control={form.control}
@@ -98,7 +103,6 @@ const { form, action, handleSubmitWithAction } = useHookFormAction(
             )}
           />
 
-          {/* Password */}
           <FormField
             name="password"
             control={form.control}
@@ -127,7 +131,6 @@ const { form, action, handleSubmitWithAction } = useHookFormAction(
             )}
           />
 
-          {/* Conferma Password */}
           <FormField
             name="confirmPassword"
             control={form.control}
@@ -155,17 +158,17 @@ const { form, action, handleSubmitWithAction } = useHookFormAction(
             )}
           />
 
-          {/* ✅ action.isPending sostituisce form.formState.isSubmitting */}
-         <Button type="submit" className="w-full" disabled={action.isPending}>
-  {action.isPending ? (
-    <>
-      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-      Registrazione...
-    </>
-  ) : (
-    "Registrati"
-  )}
-</Button>
+          <Button type="submit" className="w-full" disabled={action.isPending}>
+            {action.isPending ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Registrazione...
+              </>
+            ) : (
+              "Registrati"
+            )}
+          </Button>
+
           <p className="text-center text-sm text-muted-foreground">
             Hai già un account?{" "}
             <a href="/login" className="text-primary font-medium hover:underline">
