@@ -32,7 +32,7 @@ export function RegisterForm() {
   //    - Errori server in action.result.serverError
   //    - Loading in action.isPending
   //    - Nessun useState per error/isSubmitting
-  const { form, action, handleSubmitWithAction } = useHookFormAction(
+const { form, action, handleSubmitWithAction } = useHookFormAction(
     registerAction,
     zodResolver(registerSchema),
     {
@@ -45,9 +45,11 @@ export function RegisterForm() {
         },
       },
       actionProps: {
-        onSuccess: () => {
-          router.push("/verify-email")
-        },
+        // ✅ Passa l'email come query param così verify-email
+        //    può mostrare il bottone "Reinvia email"
+    onSuccess: ({ input }) => {
+  router.push(`/verify-email?email=${encodeURIComponent(input.email)}`)
+},
       },
     }
   )
