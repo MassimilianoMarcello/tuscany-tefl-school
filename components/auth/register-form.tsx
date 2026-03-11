@@ -4,7 +4,7 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { useHookFormAction } from "@next-safe-action/adapter-react-hook-form/hooks"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { UserPlus, Eye, EyeOff } from "lucide-react"
+import { UserPlus, Eye, EyeOff,Loader2 } from "lucide-react"
 import { registerAction } from "@/actions/register"
 import { registerSchema } from "@/lib/validations/auth"
 import { AuthCard } from "./auth-card"
@@ -46,7 +46,7 @@ export function RegisterForm() {
       },
       actionProps: {
         onSuccess: () => {
-          router.push("/login")
+          router.push("/verify-email")
         },
       },
     }
@@ -154,10 +154,16 @@ export function RegisterForm() {
           />
 
           {/* ✅ action.isPending sostituisce form.formState.isSubmitting */}
-          <Button type="submit" className="w-full" disabled={action.isPending}>
-            {action.isPending ? "Registrazione..." : "Registrati"}
-          </Button>
-
+         <Button type="submit" className="w-full" disabled={action.isPending}>
+  {action.isPending ? (
+    <>
+      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+      Registrazione...
+    </>
+  ) : (
+    "Registrati"
+  )}
+</Button>
           <p className="text-center text-sm text-muted-foreground">
             Hai già un account?{" "}
             <a href="/login" className="text-primary font-medium hover:underline">
