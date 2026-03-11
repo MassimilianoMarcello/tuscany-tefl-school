@@ -12,18 +12,49 @@ export const auth = betterAuth({
 
   emailAndPassword: {
     enabled: true,
-    // Blocca il login finché l'email non è verificata
     requireEmailVerification: true,
+    // ✅ Better Auth chiama questa funzione quando l'utente richiede il reset
+    //    void invece di await — stesso pattern di sendVerificationEmail
+    sendResetPassword: async ({ user, url }) => {
+      console.log("📧 sendResetPassword chiamata per:", user.email)
+      void resend.emails.send({
+        from: "onboarding@resend.dev",
+        to: user.email,
+        subject: "Reimposta la tua password",
+        html: `
+          <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto;">
+            <h2>Reimposta la tua password</h2>
+            <p>Hai richiesto di reimpostare la password. Clicca il link qui sotto:</p>
+            <a
+              href="${url}"
+              style="
+                display: inline-block;
+                padding: 12px 24px;
+                background-color: #000;
+                color: #fff;
+                text-decoration: none;
+                border-radius: 6px;
+                margin: 16px 0;
+              "
+            >
+              Reimposta password
+            </a>
+            <p style="color: #666; font-size: 14px;">
+              Il link scade tra 1 ora. Se non hai richiesto il reset, ignora questa email.
+            </p>
+          </div>
+        `,
+      })
+    },
   },
 
   emailVerification: {
     sendOnSignUp: true,
     autoSignInAfterVerification: true,
-    
     // ✅ void invece di await — Better Auth non aspetta la risposta email
     // ✅ token aggiunto come parametro (richiesto dalla firma corretta)
     sendVerificationEmail: async ({ user, url, token }, request) => {
-
+      console.log("📧 sendVerificationEmail chiamata per:", user.email)
       void resend.emails.send({
         // ✅ In sviluppo usa sempre onboarding@resend.dev
         // In produzione sostituisci con il tuo dominio verificato su Resend
