@@ -80,6 +80,7 @@ Better Auth solves both: session management is handled by the library with expli
 - Sanity integration — course content and pages
 - Stripe — course purchase and webhook enrollment
 - Rate limiting on auth endpoints (Upstash)
+- Rate limiting on resend verification email endpoint (Upstash)
 - E2E tests with Playwright on critical paths
 
 ---
