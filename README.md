@@ -57,6 +57,13 @@ Better Auth solves both: session management is handled by the library with expli
 
 **Zod schema duplication** — `registerSchema` and `loginSchema` were defined twice — once in the form and once in the server action. A change to a validation rule required updating both files. Resolved by centralizing all schemas in `lib/validations/auth.ts` and importing from there.
 
+**Error handling across the server/client boundary** — Better Auth throws 
+errors with natural language messages like "Email not verified". 
+The challenge was distinguishing errors that should show an Alert from errors 
+that should trigger a redirect. Solved by mapping known error messages to 
+typed codes in `handleServerError` (safe-action.ts), so the client can switch 
+on those codes instead of parsing strings — keeping error handling predictable 
+and centralized.
 ---
 
 ## Current Status
