@@ -1,0 +1,123 @@
+{
+  "auth": {
+    "login": {
+      "title": "Welcome back",
+      "description": "Sign in to your account",
+      "email": "Email",
+      "emailPlaceholder": "john@example.com",
+      "password": "Password",
+      "passwordPlaceholder": "Your password",
+      "forgotPassword": "Forgot password?",
+      "submit": "Sign in",
+      "submitting": "Signing in...",
+      "noAccount": "Don't have an account?",
+      "register": "Sign up",
+      "googleButton": "Sign in with Google",
+      "orSeparator": "or",
+      "resetSuccess": "Password updated. Sign in with your new password."
+    },
+    "register": {
+      "title": "Create an account",
+      "description": "Enter your details to register",
+      "name": "Name",
+      "namePlaceholder": "John Smith",
+      "email": "Email",
+      "emailPlaceholder": "john@example.com",
+      "password": "Password",
+      "passwordPlaceholder": "At least 8 characters",
+      "confirmPassword": "Confirm password",
+      "confirmPasswordPlaceholder": "Repeat your password",
+      "submit": "Sign up",
+      "submitting": "Signing up...",
+      "hasAccount": "Already have an account?",
+      "login": "Sign in",
+      "googleButton": "Sign up with Google"
+    },
+    "verifyEmail": {
+      "title": "Check your email",
+      "description": "We sent you a verification link. Click the link in the email to activate your account.",
+      "invalidTokenTitle": "Invalid link",
+      "invalidTokenDescription": "The verification link has expired or is invalid. Request a new link.",
+      "resentTitle": "Email not verified",
+      "resentDescription": "We sent a new verification link to your address. Check your inbox.",
+      "backToLogin": "Back to login"
+    },
+    "forgotPassword": {
+      "title": "Forgot password",
+      "description": "Enter your email to receive a reset link.",
+      "email": "Email",
+      "emailPlaceholder": "john@example.com",
+      "submit": "Send reset link",
+      "submitting": "Sending...",
+      "backToLogin": "Back to login"
+    },
+    "forgotPasswordSent": {
+      "title": "Check your email",
+      "description": "If the address is associated with an account, you will receive a link to reset your password. The link expires in 1 hour.",
+      "backToLogin": "Back to login"
+    },
+    "resetPassword": {
+      "title": "New password",
+      "description": "Choose a new password for your account.",
+      "password": "New password",
+      "passwordPlaceholder": "At least 8 characters",
+      "confirmPassword": "Confirm new password",
+      "confirmPasswordPlaceholder": "Repeat your new password",
+      "submit": "Save new password",
+      "submitting": "Saving...",
+      "invalidToken": "The reset link is invalid or has expired.",
+      "requestNew": "Request a new link"
+    },
+    "resendVerification": {
+      "sending": "Sending...",
+      "cooldown": "Retry in {seconds}s",
+      "button": "Resend verification email"
+    },
+    "changePassword": {
+      "title": "Change password",
+      "description": "Update your password. All other active sessions will be signed out.",
+      "currentPassword": "Current password",
+      "currentPasswordPlaceholder": "Your current password",
+      "newPassword": "New password",
+      "newPasswordPlaceholder": "At least 8 characters",
+      "confirmPassword": "Confirm new password",
+      "confirmPasswordPlaceholder": "Repeat your new password",
+      "submit": "Update password",
+      "submitting": "Saving...",
+      "success": "Password updated successfully. All other active sessions have been signed out.",
+      "errorInvalidPassword": "The current password is incorrect.",
+      "errorNoCredential": "No password associated with this account. Use Google to sign in.",
+      "errorGeneric": "An error occurred. Please try again later."
+    }
+  },
+  "settings": {
+    "title": "Change password",
+    "description": "Update your password. All other active sessions will be signed out."
+  },
+  "passwordRequirements": {
+    "minChars": "At least 8 characters",
+    "uppercase": "One uppercase letter",
+    "number": "One number",
+    "symbol": "One symbol (e.g. !@#$)"
+  },
+  "validation": {
+    "nameMin": "Name must be at least 2 characters",
+    "emailInvalid": "Invalid email",
+    "passwordMin": "Password must be at least 8 characters",
+    "passwordUppercase": "Password must contain at least one uppercase letter",
+    "passwordNumber": "Password must contain at least one number",
+    "passwordSpecial": "Password must contain at least one special character",
+    "passwordsNoMatch": "Passwords do not match",
+    "passwordSame": "New password must be different from the current one",
+    "currentPasswordRequired": "Enter your current password",
+    "passwordRequired": "Enter your password"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "settings": "Settings",
+    "logout": "Sign out"
+  },
+  "navigation": {
+    "switchLanguage": "Italiano"
+  }
+}
