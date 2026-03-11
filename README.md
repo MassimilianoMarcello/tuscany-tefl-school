@@ -1,126 +1,103 @@
-TEFL School Portfolio Project: Digital Transformation
-Status: 🚧 In Development / 🚀 Production Ready
+# Tuscany TEFL School — Digital Transformation
 
-Original Site vs. Revamp: Improving performance, security, and scalability.
+**Status:** 🚧 In Development
 
-📖 Table of Contents
-Overview
+A complete redesign of a real TEFL school's legacy website. The goal is to improve the course enrollment experience, modernize the authentication system, and give the client full autonomy over content management — without needing a developer for day-to-day changes.
 
-Tech Stack
+---
 
-The Migration (Auth.js to BetterAuth)
+## Tech Stack
 
-Content Management
+| Area | Technology | Motivation |
+|---|---|---|
+| Framework | Next.js 15 (App Router) | Server Components, Server Actions, built-in routing |
+| Auth | Better Auth | See migration notes below |
+| Database | PostgreSQL via Neon | Serverless-ready, zero infrastructure management |
+| ORM | Prisma 7 | Type-safe queries, native Better Auth adapter |
+| CMS | Sanity.io | Headless, client-manageable content |
+| UI | shadcn/ui + Tailwind CSS | Accessible components, lives in the codebase |
+| Validation | Zod v4 | Shared schemas between client and server |
+| Server Actions | next-safe-action | Typed actions, centralized error handling |
+| Payments | Stripe (planned) | Webhook-based enrollment confirmation |
 
-Performance & Optimization
+---
 
-Testing Strategy
+## The Migration: Auth.js → Better Auth
 
-Documentation & Handover
+The first version of this project used Auth.js (NextAuth v5). After building a complete authentication flow including 2FA, I ran into two concrete problems:
 
-🌟 Overview
-Client: A real TEFL (Teaching English as a Foreign Language) School.
+**Session renewal after 2FA validation** — after completing the second factor, the session was not being renewed correctly. The token state after 2FA completion was inconsistent and required manual workarounds that felt brittle.
 
-Objective: Complete redesign of the legacy website to enhance user experience, simplify course enrollment, and fix critical authentication bugs.
+**Documentation** — Auth.js documentation is fragmented across versions, spread across multiple sites, and in several cases contradicted itself between v4 and v5. Debugging edge cases meant reading GitHub issues rather than official docs.
 
-🛠 Tech Stack
-Framework: Next.js 16 (App Router)
+Better Auth solves both: session management is handled by the library with explicit, predictable behavior, and the documentation is centralized and version-specific. The Prisma adapter works out of the box with zero configuration beyond pointing it at the database.
 
-Auth: BetterAuth (chosen for session stability and DX)
+> For recruiters: see `lib/auth.ts` for the Better Auth configuration and `lib/safe-action.ts` for how server-side errors are handled centrally without try/catch in every action.
 
-CMS: Sanity.io (Headless CMS for course management)
+---
 
-Database & ORM: PostgreSQL + Prisma
+## Architectural Decisions
 
-UI/UX: Tailwind CSS + shadcn/ui
+**Zod schemas are centralized** — `lib/validations/auth.ts` exports schemas imported by both the React form (client-side validation) and the server action (server-side validation). One change propagates everywhere with no risk of drift.
 
-🔐 The Migration (Phase 1: Authentication)
-Why BetterAuth?
-Issue: The previous version used Auth.js, which led to inconsistent session refreshes and complex JWT management.
+**next-safe-action wraps all server actions** — instead of `return { success: false, error: "..." }` written manually in every action, errors bubble up to a single `handleServerError` in `lib/safe-action.ts`. Actions are smaller and error handling is consistent.
 
-Solution: Migrated to BetterAuth for built-in automatic token rotation and seamless integration with Prisma.
+**Sanity handles content, Prisma handles logic** — course descriptions, photos, and copy live in Sanity and are client-editable. Dates, available seats, pricing, and bookings live in Prisma. The two are linked via a `sanityId` field on the `Course` model. This means the client can update content without touching anything that affects business logic.
 
-Result: A 100% reliable login flow and cleaner server-side session checks.
+**Role field added early** — `User.role` (USER / ADMIN) was added to the Prisma schema before building any admin functionality. Adding roles after middleware, access control, and admin UI are already built is significantly more expensive.
 
-Note for Recruiters: Look at lib/auth.ts to see how session persistence is handled via database sessions.
+---
 
-📝 Content Management (Phase 2: Sanity.io)
-The school's courses and teachers are managed via Sanity.io.
+## Current Status
 
-Dynamic Routing: Courses are fetched at build time but updated incrementally via ISR (Incremental Static Regeneration).
+### ✅ Done
+- Authentication — register, login, logout with Better Auth
+- Password validation with real-time requirements UI
+- Session management via `nextCookies()` plugin
+- Dashboard layout with shadcn/ui Sidebar
+- User role system in schema (USER / ADMIN)
+- Prisma schema with all Better Auth models
 
-Image Optimization: Utilizing the Sanity Image Pipeline to serve WebP formats based on device size.
+### 🚧 In Progress
+- Email verification after registration
+- Forgot password / reset password flow
+- Route protection middleware
 
-⚡ Performance & Optimization (Phase 3)
-Core Web Vitals: Aiming for a 100/100 Lighthouse score.
+### 📋 Planned
+- Google OAuth
+- Admin panel — course and booking management
+- Sanity integration — course content and pages
+- Stripe — course purchase and webhook enrollment
+- Rate limiting on auth endpoints (Upstash)
+- E2E tests with Playwright on critical paths
 
-Partial Prerendering (PPR): Used to keep the landing page static while making the "Student Dashboard" dynamic.
+---
 
-Database Queries: Optimized via Prisma's select to avoid over-fetching data.
-
-🧪 Testing Strategy (Phase 4)
-End-to-End (E2E): Tested with Playwright.
-
-Critical Path: User login -> Course selection -> Enrollment confirmation.
-
-Unit Tests: Zod schemas are tested to ensure strict data validation for course pricing and emails.
-
-📁 How to Run
-Bash
-# Install dependencies
-npm install
-
-# Setup Prisma
-npx prisma generate
-npx prisma migrate dev
-
-# Run development server
-npm run dev
-💡 Why this project is in my portfolio
-This isn't just a "pretty website." It solves real-world business problems:
-
-Security: Implemented a robust auth system where others failed.
-
-Performance: Reduced load times by X% compared to the legacy site.
-
-Scalability: The Headless CMS approach allows the client to add hundreds of courses without needing a developer.
-
-
-
-
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
-
-## Getting Started
-
-First, run the development server:
+## Running Locally
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+# Install dependencies
+pnpm install
+
+# Set up environment variables
+cp .env.example .env.local
+# Fill in: DATABASE_URL, BETTER_AUTH_SECRET, NEXT_PUBLIC_BASE_URL
+
+# Set up the database
+npx prisma migrate dev
+npx prisma generate
+
+# Start the dev server
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Why This Is in My Portfolio
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+This project solves real business problems for a real client:
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Evaluated two auth solutions** and made a documented technical decision based on concrete problems encountered, not preference
+- **Identified a scalability issue early** (role management) and addressed it before it became expensive
+- **Separated concerns** between content (Sanity) and business logic (Prisma) so the client has autonomy without touching code
+- **Typed end-to-end** — from Zod schema to server action to form, types are inferred not written manually
