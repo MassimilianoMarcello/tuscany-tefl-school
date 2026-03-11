@@ -19,6 +19,7 @@ export const auth = betterAuth({
   emailVerification: {
     sendOnSignUp: true,
     autoSignInAfterVerification: true,
+    
     // ✅ void invece di await — Better Auth non aspetta la risposta email
     // ✅ token aggiunto come parametro (richiesto dalla firma corretta)
     sendVerificationEmail: async ({ user, url, token }, request) => {
