@@ -1,4 +1,3 @@
-
 // lib/validations/auth.ts
 // ✅ Schema centralizzati — importati sia dai form client che dalle server actions.
 //    Nessuna duplicazione. Una modifica qui si propaga ovunque.
@@ -23,5 +22,21 @@ export const loginSchema = z.object({
   password: z.string().min(1, { error: "Inserisci la password" }),
 })
 
+export const forgotPasswordSchema = z.object({
+  email: z.email({ error: "Email non valida" }),
+})
+
+export const resetPasswordSchema = z
+  .object({
+    password: passwordSchema,
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    error: "Le password non coincidono",
+    path: ["confirmPassword"],
+  })
+
 export type RegisterFormData = z.infer<typeof registerSchema>
 export type LoginFormData = z.infer<typeof loginSchema>
+export type ForgotPasswordFormData = z.infer<typeof forgotPasswordSchema>
+export type ResetPasswordFormData = z.infer<typeof resetPasswordSchema>
