@@ -1,6 +1,11 @@
 // app/(auth)/login/page.tsx
 import { LoginForm } from "@/components/auth/login-form"
 
-export default function LoginPage() {
-  return <LoginForm />
+interface LoginPageProps {
+  searchParams: Promise<{ reset?: string }>
+}
+
+export default async function LoginPage({ searchParams }: LoginPageProps) {
+  const { reset } = await searchParams
+  return <LoginForm resetSuccess={reset === "true"} />
 }

@@ -20,7 +20,11 @@ import {
 } from "@/components/ui/form"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 
-export function LoginForm() {
+interface LoginFormProps {
+  resetSuccess?: boolean
+}
+
+export function LoginForm({ resetSuccess }: LoginFormProps) {
   const router = useRouter()
   const [showPassword, setShowPassword] = useState(false)
 
@@ -39,19 +43,16 @@ export function LoginForm() {
           router.push("/dashboard")
           router.refresh()
         },
-        // ✅ Better Auth restituisce status 403 quando l'email non è verificata.
-        //    Mandiamo l'utente a /verify-email con l'email precompilata.
-        //    Better Auth reinvia automaticamente la mail di verifica al login tentato,
-        //    quindi il parametro resent=true permette alla pagina di mostrare
-        //    un messaggio "abbiamo reinviato la mail" invece di "controlla la tua email"
+        // ✅ Intercetta l'errore EMAIL_NOT_VERIFIED mappato in safe-action.ts
+        //    e reindirizza a /verify-email invece di mostrare un Alert generico.
+        //    Better Auth reinvia automaticamente la mail al tentativo di login.
         onError: ({ error, input }) => {
-  console.log("onError chiamato:", error)
-  if (error.serverError === "EMAIL_NOT_VERIFIED") {
-    router.push(
-      `/verify-email?email=${encodeURIComponent(input.email)}&resent=true`
-    )
-  }
-},
+          if (error.serverError === "EMAIL_NOT_VERIFIED") {
+            router.push(
+              `/verify-email?email=${encodeURIComponent(input.email)}&resent=true`
+            )
+          }
+        },
       },
     }
   )
@@ -62,6 +63,16 @@ export function LoginForm() {
       description="Accedi al tuo account"
       icon={LogIn}
     >
+      {/* ✅ Mostrato quando l'utente arriva da /login?reset=true */}
+      {resetSuccess && (
+        <Alert className="mb-4 border-green-500 text-green-700 bg-green-50">
+          <AlertDescription>
+            Password aggiornata. Accedi con la nuova password.
+          </AlertDescription>
+        </Alert>
+      )}
+
+      {/* Errore generico server */}
       {action.result?.serverError && (
         <Alert variant="destructive" className="mb-4">
           <AlertDescription>{action.result.serverError}</AlertDescription>
@@ -70,6 +81,7 @@ export function LoginForm() {
 
       <Form {...form}>
         <form onSubmit={handleSubmitWithAction} className="space-y-4">
+          {/* Email */}
           <FormField
             name="email"
             control={form.control}
@@ -84,6 +96,7 @@ export function LoginForm() {
             )}
           />
 
+          {/* Password */}
           <FormField
             name="password"
             control={form.control}
@@ -110,7 +123,11 @@ export function LoginForm() {
                       onClick={() => setShowPassword((v) => !v)}
                       className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
                     >
-                      {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                      {showPassword ? (
+                        <EyeOff className="h-4 w-4" />
+                      ) : (
+                        <Eye className="h-4 w-4" />
+                      )}
                     </button>
                   </div>
                 </FormControl>
