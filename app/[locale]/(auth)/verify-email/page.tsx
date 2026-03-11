@@ -1,10 +1,5 @@
-// app/(auth)/verify-email/page.tsx
-// Gestisce quattro stati:
-// 1. ?error=invalid_token  — token scaduto o non valido
-// 2. ?resent=true          — arriva dal login, Better Auth ha già reinviato la mail
-// 3. ?email=...            — appena registrato, mostra bottone reinvia
-// 4. nessun parametro      — accesso diretto
-
+// app/[locale]/(auth)/verify-email/page.tsx
+import { getTranslations } from "next-intl/server"
 import { Mail, XCircle } from "lucide-react"
 import { ResendVerificationButton } from "@/components/auth/resend-verification-button"
 import { AuthFeedback } from "@/components/auth/auth-feedback"
@@ -22,52 +17,39 @@ interface VerifyEmailPageProps {
 
 export default async function VerifyEmailPage({ searchParams }: VerifyEmailPageProps) {
   const { error, email, resent } = await searchParams
+  const t = await getTranslations("auth.verifyEmail")
 
-  // ✅ Token scaduto o non valido
   if (error === "invalid_token") {
     return (
       <AuthFeedback
         type="error"
-        title="Link non valido"
-        description="Il link di verifica è scaduto o non è valido. Richiedi un nuovo link."
+        title={t("invalidTokenTitle")}
+        description={t("invalidTokenDescription")}
         icon={XCircle}
-        action={{
-          label: "Torna al login",
-          href: "/login",
-        }}
+        action={{ label: t("backToLogin"), href: "/login" }}
       />
     )
   }
 
-  // ✅ Arriva dal login — Better Auth ha già reinviato la mail automaticamente
   if (resent === "true") {
     return (
-      <AuthCard
-        title="Email non verificata"
-        description="Abbiamo inviato un nuovo link di verifica al tuo indirizzo. Controlla la casella email."
-        icon={Mail}
-      >
+      <AuthCard title={t("resentTitle")} description={t("resentDescription")} icon={Mail}>
         <div className="flex flex-col gap-3 pt-2">
           {email && <ResendVerificationButton email={email} />}
           <Button variant="outline" asChild className="w-full">
-            <Link href="/login">Torna al login</Link>
+            <Link href="/login">{t("backToLogin")}</Link>
           </Button>
         </div>
       </AuthCard>
     )
   }
 
-  // ✅ Appena registrato
   return (
-    <AuthCard
-      title="Controlla la tua email"
-      description="Ti abbiamo inviato un link di verifica. Clicca il link nell'email per attivare il tuo account."
-      icon={Mail}
-    >
+    <AuthCard title={t("title")} description={t("description")} icon={Mail}>
       <div className="flex flex-col gap-3 pt-2">
         {email && <ResendVerificationButton email={email} />}
         <Button variant="outline" asChild className="w-full">
-          <Link href="/login">Torna al login</Link>
+          <Link href="/login">{t("backToLogin")}</Link>
         </Button>
       </div>
     </AuthCard>
