@@ -64,7 +64,7 @@ that should trigger a redirect. Solved by mapping known error messages to
 typed codes in `handleServerError` (safe-action.ts), so the client can switch 
 on those codes instead of parsing strings — keeping error handling predictable 
 and centralized.
----
+---  i
 
 ## Current Status
 
