@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useTranslations } from "next-intl"
 import { authClient } from "@/lib/auth-client"
 import { Button } from "@/components/ui/button"
 import { Loader2 } from "lucide-react"
@@ -12,10 +13,10 @@ interface ResendVerificationButtonProps {
 }
 
 export function ResendVerificationButton({ email }: ResendVerificationButtonProps) {
+  const t = useTranslations("auth.resendVerification")
   const [pending, setPending] = useState(false)
   const [cooldown, setCooldown] = useState(0)
 
-  // ✅ Countdown — decrementa ogni secondo finché cooldown > 0
   useEffect(() => {
     if (cooldown <= 0) return
     const timer = setTimeout(() => setCooldown((c) => c - 1), 1000)
@@ -29,24 +30,20 @@ export function ResendVerificationButton({ email }: ResendVerificationButtonProp
       callbackURL: "/login",
     })
     setPending(false)
-    // ✅ Avvia il cooldown dopo l'invio
     setCooldown(COOLDOWN_SECONDS)
   }
 
-  const isDisabled = pending || cooldown > 0
-
   return (
-    <Button onClick={handleResend} disabled={isDisabled} className="w-full">
+    <Button onClick={handleResend} disabled={pending || cooldown > 0} className="w-full">
       {pending ? (
         <>
           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-          Invio in corso...
+          {t("sending")}
         </>
       ) : cooldown > 0 ? (
-        // ✅ Mostra il countdown visibile — l'utente sa quanto aspettare
-        `Riprova tra ${cooldown}s`
+        t("cooldown", { seconds: cooldown })
       ) : (
-        "Reinvia email di verifica"
+        t("button")
       )}
     </Button>
   )

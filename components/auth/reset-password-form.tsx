@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import { useTranslations } from "next-intl"
 import { useHookFormAction } from "@next-safe-action/adapter-react-hook-form/hooks"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Lock, Eye, EyeOff, Loader2 } from "lucide-react"
@@ -27,20 +28,16 @@ interface ResetPasswordFormProps {
 
 export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
   const router = useRouter()
+  const t = useTranslations("auth.resetPassword")
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
   const { form, action, handleSubmitWithAction } = useHookFormAction(
-    // ✅ .bind(null, token) passa il token come bindArg tipizzato
-    //    senza modificare lo schema del form
     resetPasswordAction.bind(null, token),
     zodResolver(resetPasswordSchema),
     {
       formProps: {
-        defaultValues: {
-          password: "",
-          confirmPassword: "",
-        },
+        defaultValues: { password: "", confirmPassword: "" },
       },
       actionProps: {
         onSuccess: () => {
@@ -51,11 +48,7 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
   )
 
   return (
-    <AuthCard
-      title="Nuova password"
-      description="Scegli una nuova password per il tuo account."
-      icon={Lock}
-    >
+    <AuthCard title={t("title")} description={t("description")} icon={Lock}>
       {action.result?.serverError && (
         <Alert variant="destructive" className="mb-4">
           <AlertDescription>{action.result.serverError}</AlertDescription>
@@ -69,12 +62,12 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
             control={form.control}
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Nuova password</FormLabel>
+                <FormLabel>{t("password")}</FormLabel>
                 <FormControl>
                   <div className="relative">
                     <Input
                       type={showPassword ? "text" : "password"}
-                      placeholder="Minimo 8 caratteri"
+                      placeholder={t("passwordPlaceholder")}
                       {...field}
                     />
                     <button
@@ -97,12 +90,12 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
             control={form.control}
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Conferma password</FormLabel>
+                <FormLabel>{t("confirmPassword")}</FormLabel>
                 <FormControl>
                   <div className="relative">
                     <Input
                       type={showConfirmPassword ? "text" : "password"}
-                      placeholder="Ripeti la password"
+                      placeholder={t("confirmPasswordPlaceholder")}
                       {...field}
                     />
                     <button
@@ -123,10 +116,10 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
             {action.isPending ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Salvataggio...
+                {t("submitting")}
               </>
             ) : (
-              "Salva nuova password"
+              t("submit")
             )}
           </Button>
         </form>

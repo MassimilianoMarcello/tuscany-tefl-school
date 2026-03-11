@@ -1,6 +1,7 @@
 "use client"
 
 import { useRouter } from "next/navigation"
+import { useTranslations } from "next-intl"
 import { useHookFormAction } from "@next-safe-action/adapter-react-hook-form/hooks"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { KeyRound, Loader2 } from "lucide-react"
@@ -21,6 +22,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert"
 
 export function ForgotPasswordForm() {
   const router = useRouter()
+  const t = useTranslations("auth.forgotPassword")
 
   const { form, action, handleSubmitWithAction } = useHookFormAction(
     forgotPasswordAction,
@@ -30,23 +32,15 @@ export function ForgotPasswordForm() {
         defaultValues: { email: "" },
       },
       actionProps: {
-        // ✅ Andiamo sempre a /forgot-password/sent — anche se l'email non esiste
-        //    Better Auth non ci dice se l'email è registrata (protezione enumeration)
         onSuccess: ({ input }) => {
-          router.push(
-            `/forgot-password/sent?email=${encodeURIComponent(input.email)}`
-          )
+          router.push(`/forgot-password/sent?email=${encodeURIComponent(input.email)}`)
         },
       },
     }
   )
 
   return (
-    <AuthCard
-      title="Password dimenticata"
-      description="Inserisci la tua email. Ti manderemo un link per reimpostare la password."
-      icon={KeyRound}
-    >
+    <AuthCard title={t("title")} description={t("description")} icon={KeyRound}>
       {action.result?.serverError && (
         <Alert variant="destructive" className="mb-4">
           <AlertDescription>{action.result.serverError}</AlertDescription>
@@ -60,9 +54,9 @@ export function ForgotPasswordForm() {
             control={form.control}
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email</FormLabel>
+                <FormLabel>{t("email")}</FormLabel>
                 <FormControl>
-                  <Input type="email" placeholder="mario@esempio.com" {...field} />
+                  <Input type="email" placeholder={t("emailPlaceholder")} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -73,17 +67,16 @@ export function ForgotPasswordForm() {
             {action.isPending ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Invio in corso...
+                {t("submitting")}
               </>
             ) : (
-              "Invia link di reset"
+              t("submit")
             )}
           </Button>
 
           <p className="text-center text-sm text-muted-foreground">
-            Ricordi la password?{" "}
             <a href="/login" className="text-primary font-medium hover:underline">
-              Accedi
+              {t("backToLogin")}
             </a>
           </p>
         </form>

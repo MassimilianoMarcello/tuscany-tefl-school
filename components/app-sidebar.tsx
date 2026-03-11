@@ -1,5 +1,8 @@
 "use client"
 
+import { useTranslations } from "next-intl"
+import { useRouter } from "next/navigation"
+import { useLocale } from "next-intl"
 import {
   Sidebar,
   SidebarContent,
@@ -13,22 +16,24 @@ import {
 } from "@/components/ui/sidebar"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { authClient } from "@/lib/auth-client"
-import { useRouter } from "next/navigation"
 import { User } from "better-auth"
-import { LayoutDashboard, FileText, Settings, LogOut } from "lucide-react"
+import { LayoutDashboard, FileText, Settings, LogOut, Globe } from "lucide-react"
 
 interface AppSidebarProps {
   user?: User | null
 }
 
-const navItems = [
-  { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-  { label: "Post",      href: "/dashboard/posts", icon: FileText },
-  { label: "Impostazioni", href: "/dashboard/settings", icon: Settings },
-]
-
 export function AppSidebar({ user }: AppSidebarProps) {
   const router = useRouter()
+  const locale = useLocale()
+  const t = useTranslations("dashboard")
+
+  // ✅ Link con locale — /it/dashboard, /en/dashboard ecc.
+  const navItems = [
+    { label: t("title"), href: `/${locale}/dashboard`, icon: LayoutDashboard },
+    { label: "Post", href: `/${locale}/dashboard/posts`, icon: FileText },
+    { label: t("settings"), href: `/${locale}/dashboard/settings`, icon: Settings },
+  ]
 
   const initials = user?.name
     ?.split(" ")
@@ -40,17 +45,26 @@ export function AppSidebar({ user }: AppSidebarProps) {
     await authClient.signOut({
       fetchOptions: {
         onSuccess: () => {
-          router.push("/login")
+          router.push(`/${locale}/login`)
           router.refresh()
         },
       },
     })
   }
 
+  // ✅ Switcher lingua — alterna tra it e en mantenendo il path corrente
+  function handleLanguageSwitch() {
+    const newLocale = locale === "it" ? "en" : "it"
+    const currentPath = window.location.pathname
+    const newPath = currentPath.replace(`/${locale}`, `/${newLocale}`)
+    router.push(newPath)
+    router.refresh()
+  }
+
   return (
     <Sidebar>
       <SidebarHeader className="border-b p-4">
-        <span className="font-semibold text-base">Il tuo progetto</span>
+        <span className="font-semibold text-base">Tuscany TEFL School</span>
       </SidebarHeader>
 
       <SidebarContent>
@@ -85,13 +99,22 @@ export function AppSidebar({ user }: AppSidebarProps) {
           </div>
         )}
         <SidebarMenu>
+          {/* ✅ Language switcher */}
+          <SidebarMenuItem>
+            <SidebarMenuButton onClick={handleLanguageSwitch}>
+              <Globe className="h-4 w-4" />
+              {locale === "it" ? "English" : "Italiano"}
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+
+          {/* Logout */}
           <SidebarMenuItem>
             <SidebarMenuButton
               onClick={handleLogout}
               className="text-destructive hover:text-destructive"
             >
               <LogOut className="h-4 w-4" />
-              Logout
+              {t("logout")}
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

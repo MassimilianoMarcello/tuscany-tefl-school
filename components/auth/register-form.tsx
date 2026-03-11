@@ -1,8 +1,8 @@
 "use client"
 
-// components/auth/register-form.tsx
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import { useTranslations } from "next-intl"
 import { useHookFormAction } from "@next-safe-action/adapter-react-hook-form/hooks"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { UserPlus, Eye, EyeOff, Loader2 } from "lucide-react"
@@ -25,6 +25,7 @@ import { PasswordRequirements } from "./password-requirements"
 
 export function RegisterForm() {
   const router = useRouter()
+  const t = useTranslations("auth.register")
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
@@ -33,12 +34,7 @@ export function RegisterForm() {
     zodResolver(registerSchema),
     {
       formProps: {
-        defaultValues: {
-          name: "",
-          email: "",
-          password: "",
-          confirmPassword: "",
-        },
+        defaultValues: { name: "", email: "", password: "", confirmPassword: "" },
       },
       actionProps: {
         onSuccess: ({ input }) => {
@@ -49,21 +45,15 @@ export function RegisterForm() {
   )
 
   return (
-    <AuthCard
-      title="Crea un account"
-      description="Inserisci i tuoi dati per registrarti"
-      icon={UserPlus}
-    >
+    <AuthCard title={t("title")} description={t("description")} icon={UserPlus}>
       {action.result?.serverError && (
         <Alert variant="destructive" className="mb-4">
           <AlertDescription>{action.result.serverError}</AlertDescription>
         </Alert>
       )}
 
-      {/* Bottone Google */}
-      <GoogleButton label="Registrati con Google" />
+      <GoogleButton label={t("googleButton")} />
 
-      {/* Separatore */}
       <div className="relative my-4">
         <div className="absolute inset-0 flex items-center">
           <span className="w-full border-t" />
@@ -80,9 +70,9 @@ export function RegisterForm() {
             control={form.control}
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Nome</FormLabel>
+                <FormLabel>{t("name")}</FormLabel>
                 <FormControl>
-                  <Input placeholder="Mario Rossi" {...field} />
+                  <Input placeholder={t("namePlaceholder")} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -94,9 +84,9 @@ export function RegisterForm() {
             control={form.control}
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email</FormLabel>
+                <FormLabel>{t("email")}</FormLabel>
                 <FormControl>
-                  <Input type="email" placeholder="mario@esempio.com" {...field} />
+                  <Input type="email" placeholder={t("emailPlaceholder")} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -108,12 +98,12 @@ export function RegisterForm() {
             control={form.control}
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Password</FormLabel>
+                <FormLabel>{t("password")}</FormLabel>
                 <FormControl>
                   <div className="relative">
                     <Input
                       type={showPassword ? "text" : "password"}
-                      placeholder="Minimo 8 caratteri"
+                      placeholder={t("passwordPlaceholder")}
                       {...field}
                     />
                     <button
@@ -136,12 +126,12 @@ export function RegisterForm() {
             control={form.control}
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Conferma password</FormLabel>
+                <FormLabel>{t("confirmPassword")}</FormLabel>
                 <FormControl>
                   <div className="relative">
                     <Input
                       type={showConfirmPassword ? "text" : "password"}
-                      placeholder="Ripeti la password"
+                      placeholder={t("confirmPasswordPlaceholder")}
                       {...field}
                     />
                     <button
@@ -162,17 +152,17 @@ export function RegisterForm() {
             {action.isPending ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Registrazione...
+                {t("submitting")}
               </>
             ) : (
-              "Registrati"
+              t("submit")
             )}
           </Button>
 
           <p className="text-center text-sm text-muted-foreground">
-            Hai già un account?{" "}
+            {t("hasAccount")}{" "}
             <a href="/login" className="text-primary font-medium hover:underline">
-              Accedi
+              {t("login")}
             </a>
           </p>
         </form>

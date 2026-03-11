@@ -1,8 +1,8 @@
 "use client"
 
-// components/auth/login-form.tsx
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import { useTranslations } from "next-intl"
 import { useHookFormAction } from "@next-safe-action/adapter-react-hook-form/hooks"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { LogIn, Eye, EyeOff, Loader2 } from "lucide-react"
@@ -28,6 +28,7 @@ interface LoginFormProps {
 
 export function LoginForm({ resetSuccess }: LoginFormProps) {
   const router = useRouter()
+  const t = useTranslations("auth.login")
   const [showPassword, setShowPassword] = useState(false)
 
   const { form, action, handleSubmitWithAction } = useHookFormAction(
@@ -54,33 +55,27 @@ export function LoginForm({ resetSuccess }: LoginFormProps) {
   )
 
   return (
-    <AuthCard title="Bentornato" description="Accedi al tuo account" icon={LogIn}>
-      {/* Successo reset password */}
+    <AuthCard title={t("title")} description={t("description")} icon={LogIn}>
       {resetSuccess && (
         <Alert className="mb-4 border-green-500 text-green-700 bg-green-50">
-          <AlertDescription>
-            Password aggiornata. Accedi con la nuova password.
-          </AlertDescription>
+          <AlertDescription>{t("resetSuccess")}</AlertDescription>
         </Alert>
       )}
 
-      {/* Errore server */}
       {action.result?.serverError && (
         <Alert variant="destructive" className="mb-4">
           <AlertDescription>{action.result.serverError}</AlertDescription>
         </Alert>
       )}
 
-      {/* Bottone Google */}
-      <GoogleButton label="Accedi con Google" />
+      <GoogleButton label={t("googleButton")} />
 
-      {/* Separatore */}
       <div className="relative my-4">
         <div className="absolute inset-0 flex items-center">
           <span className="w-full border-t" />
         </div>
         <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-background px-2 text-muted-foreground">oppure</span>
+          <span className="bg-background px-2 text-muted-foreground">{t("orSeparator")}</span>
         </div>
       </div>
 
@@ -91,9 +86,9 @@ export function LoginForm({ resetSuccess }: LoginFormProps) {
             control={form.control}
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email</FormLabel>
+                <FormLabel>{t("email")}</FormLabel>
                 <FormControl>
-                  <Input type="email" placeholder="mario@esempio.com" {...field} />
+                  <Input type="email" placeholder={t("emailPlaceholder")} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -106,19 +101,19 @@ export function LoginForm({ resetSuccess }: LoginFormProps) {
             render={({ field }) => (
               <FormItem>
                 <div className="flex items-center justify-between">
-                  <FormLabel>Password</FormLabel>
+                  <FormLabel>{t("password")}</FormLabel>
                   <a
                     href="/forgot-password"
                     className="text-xs text-muted-foreground hover:text-primary transition-colors"
                   >
-                    Password dimenticata?
+                    {t("forgotPassword")}
                   </a>
                 </div>
                 <FormControl>
                   <div className="relative">
                     <Input
                       type={showPassword ? "text" : "password"}
-                      placeholder="La tua password"
+                      placeholder={t("passwordPlaceholder")}
                       {...field}
                     />
                     <button
@@ -139,17 +134,17 @@ export function LoginForm({ resetSuccess }: LoginFormProps) {
             {action.isPending ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Accesso in corso...
+                {t("submitting")}
               </>
             ) : (
-              "Accedi"
+              t("submit")
             )}
           </Button>
 
           <p className="text-center text-sm text-muted-foreground">
-            Non hai un account?{" "}
+            {t("noAccount")}{" "}
             <a href="/register" className="text-primary font-medium hover:underline">
-              Registrati
+              {t("register")}
             </a>
           </p>
         </form>

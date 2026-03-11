@@ -1,18 +1,21 @@
+import { useTranslations } from "next-intl"
 import { Check, X } from "lucide-react"
 import { cn } from "@/lib/utils"
-
-const requirements = [
-  { label: "Almeno 8 caratteri", test: (v: string) => v.length >= 8 },
-  { label: "Una lettera maiuscola", test: (v: string) => /[A-Z]/.test(v) },
-  { label: "Un numero",            test: (v: string) => /[0-9]/.test(v) },
-  { label: "Un simbolo (es. !@#$)", test: (v: string) => /[^A-Za-z0-9]/.test(v) },
-]
 
 interface PasswordRequirementsProps {
   value: string
 }
 
 export function PasswordRequirements({ value }: PasswordRequirementsProps) {
+  const t = useTranslations("passwordRequirements")
+
+  const requirements = [
+    { label: t("minChars"), test: (v: string) => v.length >= 8 },
+    { label: t("uppercase"), test: (v: string) => /[A-Z]/.test(v) },
+    { label: t("number"), test: (v: string) => /[0-9]/.test(v) },
+    { label: t("symbol"), test: (v: string) => /[^A-Za-z0-9]/.test(v) },
+  ]
+
   if (!value) return null
 
   return (
@@ -27,10 +30,7 @@ export function PasswordRequirements({ value }: PasswordRequirementsProps) {
               met ? "text-green-500" : "text-muted-foreground"
             )}
           >
-            {met
-              ? <Check className="h-3 w-3 shrink-0" />
-              : <X className="h-3 w-3 shrink-0" />
-            }
+            {met ? <Check className="h-3 w-3 shrink-0" /> : <X className="h-3 w-3 shrink-0" />}
             {label}
           </li>
         )

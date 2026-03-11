@@ -1,12 +1,8 @@
 "use client"
 
-// components/auth/change-password-form.tsx
-// ✅ Change password richiede sessione attiva — gestito client-side con authClient
-//    Non usa server action perché Better Auth verifica la sessione dai cookie
-//    revokeOtherSessions: true — invalida tutte le altre sessioni per sicurezza
-
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import { useTranslations } from "next-intl"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Eye, EyeOff, Loader2 } from "lucide-react"
@@ -27,6 +23,7 @@ import { PasswordRequirements } from "./password-requirements"
 
 export function ChangePasswordForm() {
   const router = useRouter()
+  const t = useTranslations("auth.changePassword")
   const [showCurrent, setShowCurrent] = useState(false)
   const [showNew, setShowNew] = useState(false)
   const [showConfirm, setShowConfirm] = useState(false)
@@ -49,27 +46,22 @@ export function ChangePasswordForm() {
     const { error } = await authClient.changePassword({
       currentPassword: data.currentPassword,
       newPassword: data.newPassword,
-      // ✅ Invalida tutte le altre sessioni attive per sicurezza
       revokeOtherSessions: true,
     })
 
     if (error) {
-      // Mappa gli errori di Better Auth in messaggi italiani
       if (error.message?.includes("CREDENTIAL_ACCOUNT_NOT_FOUND")) {
-        setError("Nessuna password associata a questo account. Usa Google per accedere.")
+        setError(t("errorNoCredential"))
       } else if (error.message?.includes("invalid_password") || error.status === 400) {
-        setError("La password attuale non è corretta.")
+        setError(t("errorInvalidPassword"))
       } else {
-        setError("Si è verificato un errore. Riprova più tardi.")
+        setError(t("errorGeneric"))
       }
       return
     }
 
     setSuccess(true)
     form.reset()
-
-    // ✅ revokeOtherSessions ha invalidato le altre sessioni —
-    //    questa sessione rimane attiva ma facciamo refresh per sicurezza
     router.refresh()
   }
 
@@ -77,9 +69,7 @@ export function ChangePasswordForm() {
     <div className="space-y-4">
       {success && (
         <Alert className="border-green-500 text-green-700 bg-green-50">
-          <AlertDescription>
-            Password aggiornata con successo. Le altre sessioni attive sono state disconnesse.
-          </AlertDescription>
+          <AlertDescription>{t("success")}</AlertDescription>
         </Alert>
       )}
 
@@ -91,18 +81,17 @@ export function ChangePasswordForm() {
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-          {/* Password attuale */}
           <FormField
             name="currentPassword"
             control={form.control}
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Password attuale</FormLabel>
+                <FormLabel>{t("currentPassword")}</FormLabel>
                 <FormControl>
                   <div className="relative">
                     <Input
                       type={showCurrent ? "text" : "password"}
-                      placeholder="La tua password attuale"
+                      placeholder={t("currentPasswordPlaceholder")}
                       {...field}
                     />
                     <button
@@ -119,18 +108,17 @@ export function ChangePasswordForm() {
             )}
           />
 
-          {/* Nuova password */}
           <FormField
             name="newPassword"
             control={form.control}
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Nuova password</FormLabel>
+                <FormLabel>{t("newPassword")}</FormLabel>
                 <FormControl>
                   <div className="relative">
                     <Input
                       type={showNew ? "text" : "password"}
-                      placeholder="Minimo 8 caratteri"
+                      placeholder={t("newPasswordPlaceholder")}
                       {...field}
                     />
                     <button
@@ -148,18 +136,17 @@ export function ChangePasswordForm() {
             )}
           />
 
-          {/* Conferma nuova password */}
           <FormField
             name="confirmPassword"
             control={form.control}
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Conferma nuova password</FormLabel>
+                <FormLabel>{t("confirmPassword")}</FormLabel>
                 <FormControl>
                   <div className="relative">
                     <Input
                       type={showConfirm ? "text" : "password"}
-                      placeholder="Ripeti la nuova password"
+                      placeholder={t("confirmPasswordPlaceholder")}
                       {...field}
                     />
                     <button
@@ -176,17 +163,14 @@ export function ChangePasswordForm() {
             )}
           />
 
-          <Button
-            type="submit"
-            disabled={form.formState.isSubmitting}
-          >
+          <Button type="submit" disabled={form.formState.isSubmitting}>
             {form.formState.isSubmitting ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Salvataggio...
+                {t("submitting")}
               </>
             ) : (
-              "Aggiorna password"
+              t("submit")
             )}
           </Button>
         </form>
