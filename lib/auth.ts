@@ -51,7 +51,7 @@ export const auth = betterAuth({
     sendOnSignUp: true,
     autoSignInAfterVerification: true,
     // ✅ void invece di await — Better Auth non aspetta la risposta email
-    sendVerificationEmail: async ({ user, url, token }, request) => {
+    sendVerificationEmail: async ({ user, url }) => {
       console.log("📧 sendVerificationEmail chiamata per:", user.email)
       void resend.emails.send({
         from: "onboarding@resend.dev",
