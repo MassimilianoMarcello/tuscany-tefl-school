@@ -9,6 +9,7 @@ import { cache } from "react"
 import { headers } from "next/headers"
 import { redirect } from "next/navigation"
 import { auth } from "./auth"
+import type { UserWithRole } from "@/types/prisma"
 
 export const verifySession = cache(async () => {
   const session = await auth.api.getSession({
@@ -26,7 +27,7 @@ export const verifySession = cache(async () => {
 export const verifyAdmin = cache(async () => {
   const session = await verifySession()
 
-  if (session.user.role !== "ADMIN") {
+  if ((session.user as unknown as UserWithRole).role !== "ADMIN") {
     redirect("/dashboard")
   }
 
