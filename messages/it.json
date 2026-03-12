@@ -117,6 +117,34 @@
     "settings": "Impostazioni",
     "logout": "Esci"
   },
+  "admin": {
+    "title": "Admin Panel",
+    "logout": "Esci",
+    "nav": {
+      "label": "Gestione",
+      "overview": "Panoramica",
+      "users": "Utenti"
+    },
+    "overview": {
+      "title": "Panoramica",
+      "totalUsers": "Utenti totali",
+      "newThisMonth": "Nuovi questo mese",
+      "admins": "Amministratori"
+    },
+    "users": {
+      "title": "Gestione utenti",
+      "name": "Nome",
+      "email": "Email",
+      "role": "Ruolo",
+      "provider": "Provider",
+      "joined": "Registrato",
+      "actions": "Azioni",
+      "makeAdmin": "Promuovi ad Admin",
+      "makeUser": "Declassa a User",
+      "promoting": "Aggiornamento...",
+      "roleUpdated": "Ruolo aggiornato con successo."
+    }
+  },
   "navigation": {
     "switchLanguage": "English"
   }

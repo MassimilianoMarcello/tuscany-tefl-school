@@ -117,6 +117,34 @@
     "settings": "Settings",
     "logout": "Sign out"
   },
+  "admin": {
+    "title": "Admin Panel",
+    "logout": "Sign out",
+    "nav": {
+      "label": "Management",
+      "overview": "Overview",
+      "users": "Users"
+    },
+    "overview": {
+      "title": "Overview",
+      "totalUsers": "Total users",
+      "newThisMonth": "New this month",
+      "admins": "Administrators"
+    },
+    "users": {
+      "title": "User management",
+      "name": "Name",
+      "email": "Email",
+      "role": "Role",
+      "provider": "Provider",
+      "joined": "Joined",
+      "actions": "Actions",
+      "makeAdmin": "Promote to Admin",
+      "makeUser": "Demote to User",
+      "promoting": "Updating...",
+      "roleUpdated": "Role updated successfully."
+    }
+  },
   "navigation": {
     "switchLanguage": "Italiano"
   }
