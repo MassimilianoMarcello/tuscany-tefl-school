@@ -16,11 +16,15 @@ import {
 } from "@/components/ui/sidebar"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { authClient } from "@/lib/auth-client"
-import { User } from "better-auth"
 import { LayoutDashboard, FileText, Settings, LogOut, Globe } from "lucide-react"
 
 interface AppSidebarProps {
-  user?: User | null
+  user?: {
+    id: string
+    name: string
+    email: string
+    image?: string | null
+  } | null
 }
 
 export function AppSidebar({ user }: AppSidebarProps) {
