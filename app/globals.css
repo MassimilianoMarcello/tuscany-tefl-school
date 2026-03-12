@@ -45,6 +45,19 @@
   --radius-3xl: calc(var(--radius) + 12px);
   --radius-4xl: calc(var(--radius) + 16px);
 }
+/* DOPO il blocco @theme inline { ... } */
+
+@theme {
+  /* === BRAND CORE === */
+  --color-brand-blue:        #1f3d4b;
+  --color-brand-blue-dark:   #1a3847;
+  --color-brand-azure:       #add9e6;
+  --color-brand-green:       #4f926c;
+  --color-brand-green-dark:  #3d7455;
+  --color-brand-gold:        #ffd704;
+  --color-brand-bg:          #eceff0;
+  --color-brand-text:        #151e30;
+}
 
 :root {
   --radius: 0.625rem;

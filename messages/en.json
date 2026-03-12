@@ -146,6 +146,27 @@
     }
   },
   "navigation": {
-    "switchLanguage": "Italiano"
+    "switchLanguage": "Italiano",
+    "home": "Home",
+    "ourCourses": "Our Courses",
+    "ourTeachers": "Our Teachers",
+    "reviews": "Reviews",
+    "faq": "FAQ",
+    "more": "More",
+    "accredited": "Accredited",
+    "workInItaly": "Work in Italy",
+    "internship": "Internship",
+    "podcast": "Podcast",
+    "consultationSessions": "Consultation Sessions",
+    "aboutUs": "About Us",
+    "contact": "Contact",
+    "datesAndPrices": "Dates & Prices",
+    "applyNow": "Apply Now",
+    "signIn": "Sign in",
+    "register": "Register",
+    "dashboard": "Dashboard",
+    "settings": "Settings",
+    "adminPanel": "Admin Panel",
+    "signOut": "Sign out"
   }
 }

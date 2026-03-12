@@ -146,7 +146,28 @@
     }
   },
   "navigation": {
-    "switchLanguage": "English"
+    "switchLanguage": "English",
+    "home": "Home",
+    "ourCourses": "I nostri corsi",
+    "ourTeachers": "I nostri insegnanti",
+    "reviews": "Recensioni",
+    "faq": "FAQ",
+    "more": "Altro",
+    "accredited": "Accreditamenti",
+    "workInItaly": "Lavora in Italia",
+    "internship": "Stage",
+    "podcast": "Podcast",
+    "consultationSessions": "Sessioni di consulenza",
+    "aboutUs": "Chi siamo",
+    "contact": "Contatti",
+    "datesAndPrices": "Date e prezzi",
+    "applyNow": "Candidati ora",
+    "signIn": "Accedi",
+    "register": "Registrati",
+    "dashboard": "Dashboard",
+    "settings": "Impostazioni",
+    "adminPanel": "Pannello Admin",
+    "signOut": "Esci"
   }
 }
 
