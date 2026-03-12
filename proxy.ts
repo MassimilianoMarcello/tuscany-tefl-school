@@ -47,7 +47,6 @@ export function proxy(request: NextRequest) {
 
 export const config = {
   matcher: [
-    // Applica a tutti i path tranne file statici e API Better Auth
-    "/((?!_next/static|_next/image|favicon.ico|api/auth).*)",
+    "/((?!_next/static|_next/image|favicon.ico|api/auth|assets).*)",
   ],
 }

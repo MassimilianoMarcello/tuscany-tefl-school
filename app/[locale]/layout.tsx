@@ -9,6 +9,7 @@ import { getMessages } from "next-intl/server"
 import { notFound } from "next/navigation"
 import { routing } from "@/i18n/routing"
 import "../globals.css"
+import { Navbar } from "@/components/navbar"
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -45,6 +46,7 @@ export default async function RootLayout({ children, params }: RootLayoutProps) 
     <html lang={locale}>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <NextIntlClientProvider messages={messages}>
+           <Navbar locale={locale} />
           {children}
         </NextIntlClientProvider>
       </body>

@@ -6,6 +6,9 @@ const withNextIntl = createNextIntlPlugin("./i18n/request.ts")
 
 const nextConfig: NextConfig = {
   serverExternalPackages: ["@prisma/client-runtime-utils"],
+images: {
+    unoptimized: true,
+  },
 }
 
 export default withNextIntl(nextConfig)
