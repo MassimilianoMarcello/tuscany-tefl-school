@@ -1,5 +1,5 @@
 // app/(main)/[locale]/our_courses/page.tsx
-import { getCourses } from "@/lib/sanity.queries"
+import { getCourses, getCommonTopPageByIdentifier } from "@/lib/sanity.queries"
 import { getTranslations } from "next-intl/server"
 import { CourseCard } from "@/components/courses/course-card"
 import { CoursesHero } from "@/components/courses/courses-hero"
@@ -10,16 +10,17 @@ interface CoursesPageProps {
 
 export default async function CoursesPage({ params }: CoursesPageProps) {
   const { locale } = await params
-  const [courses, t] = await Promise.all([
+  const [courses, t, topPage] = await Promise.all([
     getCourses(),
     getTranslations("courses"),
+    getCommonTopPageByIdentifier("about-our-tefl-courses-in-tuscany-italy"),
   ])
 
   return (
-    <main className="min-h-screen bg-brand-bg">
-      <CoursesHero locale={locale} />
+    <main className="min-h-screen bg-brand-bg " >
+      <CoursesHero locale={locale} data={topPage} />
 
-      <section className="max-w-7xl mx-auto px-4 md:px-8 py-16">
+      <section className="max-w-7xl mx-auto px-4 md:px-8 py-16 ">
         {/* Titolo sezione */}
         <div className="w-full border border-brand-azure px-4 py-8 mb-12">
           <h2 className="text-3xl md:text-4xl font-black text-brand-blue text-center uppercase tracking-wide">
