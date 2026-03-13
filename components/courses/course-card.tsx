@@ -20,7 +20,7 @@ export function CourseCard({ course, locale }: CourseCardProps) {
     : null
 
   return (
-    <div className="relative rounded-xl overflow-hidden border border-gray-200 shadow-md bg-white flex flex-col">
+    <div className="relative rounded-xl overflow-hidden border border-gray-200 shadow-md bg-white flex flex-col h-full">
       {/* Image */}
       <div className="relative">
         {course.photo ? (
@@ -60,7 +60,7 @@ export function CourseCard({ course, locale }: CourseCardProps) {
 
         {/* Course name */}
         <div className="border-t-4 border-brand-gold bg-white px-4 py-2">
-          <p className="text-brand-blue font-black text-xl">{course.name}</p>
+          <p className="text-brand-blue font-black text-xl line-clamp-2">{course.name}</p>
         </div>
       </div>
 

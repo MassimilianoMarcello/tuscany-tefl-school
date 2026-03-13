@@ -1,4 +1,5 @@
 
+
 {
   "auth": {
     "login": {
@@ -186,5 +187,14 @@
     "maxStudents": "Max students",
     "applyNow": "Apply Now",
     "backToCourses": "All courses"
+  },
+  "teachers": {
+    "heroTitle": "At Tuscany TEFL School, we pride ourselves on providing top-tier education and training in Teaching English as a Foreign Language.",
+    "introOne": "Our team of highly qualified and experienced teachers is passionate about helping you succeed in your journey to becoming a certified TEFL instructor. Each of our teachers holds internationally recognized TEFL certifications.",
+    "introTwo": "They bring a personalized approach to their teaching, ensuring that every student receives the support and guidance needed to excel. With a focus on practical skills, cultural awareness, and innovative teaching methods, our teachers are dedicated to preparing you for a successful career in teaching English abroad or online.",
+    "noTeachers": "No teachers available at the moment.",
+    "joinTeam": "Join The Team",
+    "joinTeamSub": "We're always looking for talented teachers to join our team.",
+    "backToTeachers": "All teachers"
   }
 }

@@ -119,7 +119,7 @@
     "welcome": "Benvenuto",
     "ready": "La tua dashboard è pronta."
   },
-  "admin": {
+    "admin": {
     "title": "Admin Panel",
     "logout": "Esci",
     "nav": {
@@ -185,5 +185,14 @@
     "maxStudents": "Max studenti",
     "applyNow": "Candidati ora",
     "backToCourses": "Tutti i corsi"
+  },
+  "teachers": {
+    "heroTitle": "Al TEFL Tuscany School siamo orgogliosi di offrire un'istruzione di alto livello per l'insegnamento dell'inglese come lingua straniera.",
+    "introOne": "I nostri aspiranti insegnanti TEFL provengono da contesti professionali diversi. I nostri programmi TEFL in Toscana, Italia, sono pensati per essere accessibili a tutti, anche a chi ha poca o nessuna esperienza di insegnamento.",
+    "introTwo": "Privilegiamo ambienti di apprendimento intimi, limitando le classi a un massimo di 12 tirocinanti. Il nostro obiettivo è sviluppare le competenze didattiche e l'occupabilità dei nostri studenti, attraverso partnership con istituti scolastici in tutta Firenze.",
+    "noTeachers": "Nessun insegnante disponibile al momento.",
+    "joinTeam": "Unisciti al team",
+    "joinTeamSub": "Siamo sempre alla ricerca di insegnanti talentuosi da aggiungere al nostro team.",
+    "backToTeachers": "Tutti gli insegnanti"
   }
 }
