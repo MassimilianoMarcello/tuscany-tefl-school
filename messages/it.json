@@ -115,7 +115,9 @@
   "dashboard": {
     "title": "Dashboard",
     "settings": "Impostazioni",
-    "logout": "Esci"
+    "logout": "Esci",
+    "welcome": "Benvenuto",
+    "ready": "La tua dashboard è pronta."
   },
   "admin": {
     "title": "Admin Panel",
@@ -170,5 +172,3 @@
     "signOut": "Esci"
   }
 }
-
-

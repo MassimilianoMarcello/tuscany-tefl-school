@@ -1,7 +1,12 @@
 // app/layout.tsx
-// ✅ Root layout minimalista — il layout reale è in app/[locale]/layout.tsx
-//    Questo serve solo come entry point richiesto da Next.js
+// ✅ Root layout con html e body — richiesto da Next.js
+//    app/(main)/[locale]/layout.tsx sovrascrive questo per le pagine normali
+import type { ReactNode } from "react"
 
-export default function Layout({ children }: { children: React.ReactNode }) {
-  return children
+export default function RootLayout({ children }: { children: ReactNode }) {
+  return (
+    <html>
+      <body>{children}</body>
+    </html>
+  )
 }

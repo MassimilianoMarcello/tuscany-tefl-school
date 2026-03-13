@@ -115,7 +115,9 @@
   "dashboard": {
     "title": "Dashboard",
     "settings": "Settings",
-    "logout": "Sign out"
+    "logout": "Sign out",
+    "welcome": "Welcome",
+    "ready": "Your dashboard is ready."
   },
   "admin": {
     "title": "Admin Panel",

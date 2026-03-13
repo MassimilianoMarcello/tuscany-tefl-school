@@ -45,4 +45,7 @@ next-env.d.ts
 # prisma
 /generated/prisma
 
+/backup.tar.gz
 
+
+backup.tar.gz
