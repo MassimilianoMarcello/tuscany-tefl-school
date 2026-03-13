@@ -1,5 +1,3 @@
-
-
 {
   "auth": {
     "login": {
@@ -196,5 +194,20 @@
     "joinTeam": "Join The Team",
     "joinTeamSub": "We're always looking for talented teachers to join our team.",
     "backToTeachers": "All teachers"
+  },
+  "faq": {
+    "heroTitle": "Frequently Asked Questions",
+    "heroSubtitle": "Find answers to the most common questions about our TEFL program.",
+    "noFaqs": "No questions available at the moment.",
+    "categories": {
+      "general": "General Questions",
+      "technical": "Paperwork and Documentation",
+      "living": "Living in Italy"
+    }
+  },
+  "aboutUs": {
+    "noContent": "Content not available.",
+    "ctaTitle": "Ready to start your TEFL journey?",
+    "ctaButton": "Apply Now"
   }
 }

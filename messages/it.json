@@ -119,7 +119,7 @@
     "welcome": "Benvenuto",
     "ready": "La tua dashboard è pronta."
   },
-    "admin": {
+  "admin": {
     "title": "Admin Panel",
     "logout": "Esci",
     "nav": {
@@ -194,5 +194,20 @@
     "joinTeam": "Unisciti al team",
     "joinTeamSub": "Siamo sempre alla ricerca di insegnanti talentuosi da aggiungere al nostro team.",
     "backToTeachers": "Tutti gli insegnanti"
+  },
+  "faq": {
+    "heroTitle": "Domande Frequenti",
+    "heroSubtitle": "Trova le risposte alle domande più comuni sul nostro programma TEFL.",
+    "noFaqs": "Nessuna domanda disponibile al momento.",
+    "categories": {
+      "general": "Domande Generali",
+      "technical": "Documenti e Burocrazia",
+      "living": "Vivere in Italia"
+    }
+  },
+  "aboutUs": {
+    "noContent": "Contenuto non disponibile.",
+    "ctaTitle": "Pronto a iniziare il tuo percorso TEFL?",
+    "ctaButton": "Candidati ora"
   }
 }
