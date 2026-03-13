@@ -240,3 +240,15 @@ export async function getCommonTopPage(): Promise<CommonTopPage | null> {
     }`
   )
 }
+
+export async function getCommonTopPageByIdentifier(identifier: string): Promise<CommonTopPage | null> {
+  return client.fetch(
+    groq`*[_type == "commonTopPage" && pageIdentifier.current == $identifier][0]{
+      _id,
+      title,
+      subtitle,
+      "backgroundImage": backgroundImage.asset->url
+    }`,
+    { identifier }
+  )
+}
