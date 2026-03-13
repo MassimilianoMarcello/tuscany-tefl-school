@@ -234,5 +234,22 @@
       "consultation": "Consultation",
       "contact": "Contact Us"
     }
+  },
+  "reviews": {
+    "title": "Students' Reviews",
+    "noReviews": "No reviews available at the moment.",
+    "formTitle": "Leave a Review",
+    "formSub": "Did you attend one of our courses? Share your experience — it will be visible after approval.",
+    "formError": "Submission error. Please try again later.",
+    "formSuccess": "Thank you for your review!",
+    "formSuccessSub": "Your review will be visible after our team approves it.",
+    "formSubmit": "Submit Review",
+    "formSubmitting": "Submitting...",
+    "fieldName": "Your name *",
+    "fieldCity": "City",
+    "fieldState": "Country",
+    "fieldTitle": "Review title *",
+    "fieldReview": "Your experience *",
+    "fieldRating": "Rating"
   }
 }

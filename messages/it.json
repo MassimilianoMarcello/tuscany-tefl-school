@@ -234,5 +234,22 @@
       "consultation": "Consulenza",
       "contact": "Contatti"
     }
+  },
+  "reviews": {
+    "title": "Recensioni degli studenti",
+    "noReviews": "Nessuna recensione disponibile al momento.",
+    "formTitle": "Lascia una recensione",
+    "formSub": "Hai frequentato un nostro corso? Condividi la tua esperienza — sarà visibile dopo approvazione.",
+    "formError": "Errore nell'invio. Riprova più tardi.",
+    "formSuccess": "Grazie per la tua recensione!",
+    "formSuccessSub": "La tua recensione sarà visibile dopo approvazione del nostro team.",
+    "formSubmit": "Invia recensione",
+    "formSubmitting": "Invio in corso...",
+    "fieldName": "Il tuo nome *",
+    "fieldCity": "Città",
+    "fieldState": "Paese",
+    "fieldTitle": "Titolo della recensione *",
+    "fieldReview": "La tua esperienza *",
+    "fieldRating": "Valutazione"
   }
 }
