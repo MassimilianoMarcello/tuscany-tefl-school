@@ -1,24 +1,26 @@
+import type { PortableTextBlock } from "@portabletext/react"
 // lib/sanity.queries.ts
 // ✅ Tutte le query GROQ centralizzate in un unico file
-//    Riusa gli schemi del vecchio progetto Sanity (projectId: r8udx71r)
-
+//    Filtra published == true per courses, testimonials, faqs
 import { groq } from "next-sanity"
 import { client } from "./sanity.client"
 
 // ─── Tipi ────────────────────────────────────────────────────────────────────
-
 export type Course = {
   _id: string
   name: string
   startDate: string
   endDate: string
   price: number
+  discount?: number
   completionTimeWeeks: number
   slug: string
-  description: string
+  description: PortableTextBlock[] | string
   hours: number
   level: string
   photo: string
+  featured?: boolean
+  maxStudents?: number
 }
 
 export type Testimonial = {
@@ -28,6 +30,8 @@ export type Testimonial = {
   state: string
   review: string
   title: string
+  rating?: number
+  courseAttended?: { name: string; slug: string }
   image: {
     asset: { _id: string; url: string }
     crop?: object
@@ -48,7 +52,7 @@ export type Teacher = {
 export type Faq = {
   _id: string
   question: string
-  answer: string
+  answer: PortableTextBlock[] | string
   category: string
   _createdAt: string
 }
@@ -67,7 +71,7 @@ export type SlideItem = {
 export type HomePage = {
   _id: string
   mainTitle: string
-  mainText: string
+  mainText: PortableTextBlock[] | string
   bannerImage: string
   components: {
     _key: string
@@ -81,12 +85,34 @@ export type HomePage = {
 
 export async function getCourses(): Promise<Course[]> {
   return client.fetch(
-    groq`*[_type == "course"]{
+    groq`*[_type == "course" && published == true] | order(startDate asc){
       _id,
       name,
       startDate,
       endDate,
       price,
+      discount,
+      completionTimeWeeks,
+      "slug": slug.current,
+      description,
+      hours,
+      level,
+      featured,
+      maxStudents,
+      "photo": photo.asset->url
+    }`
+  )
+}
+
+export async function getFeaturedCourses(): Promise<Course[]> {
+  return client.fetch(
+    groq`*[_type == "course" && published == true && featured == true] | order(startDate asc)[0...4]{
+      _id,
+      name,
+      startDate,
+      endDate,
+      price,
+      discount,
       completionTimeWeeks,
       "slug": slug.current,
       description,
@@ -99,17 +125,20 @@ export async function getCourses(): Promise<Course[]> {
 
 export async function getCourse(slug: string): Promise<Course> {
   return client.fetch(
-    groq`*[_type == "course" && slug.current == $slug][0]{
+    groq`*[_type == "course" && slug.current == $slug && published == true][0]{
       _id,
       name,
       startDate,
       endDate,
       price,
+      discount,
       completionTimeWeeks,
       "slug": slug.current,
       description,
       hours,
       level,
+      featured,
+      maxStudents,
       "photo": photo.asset->url
     }`,
     { slug }
@@ -118,13 +147,15 @@ export async function getCourse(slug: string): Promise<Course> {
 
 export async function getTestimonials(): Promise<Testimonial[]> {
   return client.fetch(
-    groq`*[_type == "testimonial"]{
+    groq`*[_type == "testimonial" && published == true] | order(_createdAt desc){
       _id,
       name,
       city,
       state,
       review,
       title,
+      rating,
+      courseAttended->{ name, "slug": slug.current },
       image{
         asset->{ _id, url },
         crop,
@@ -137,7 +168,7 @@ export async function getTestimonials(): Promise<Testimonial[]> {
 
 export async function getTeachers(): Promise<Teacher[]> {
   return client.fetch(
-    groq`*[_type == "teachers"]{
+    groq`*[_type == "teachers"] | order(name asc){
       _id,
       name,
       role,
@@ -150,7 +181,7 @@ export async function getTeachers(): Promise<Teacher[]> {
 
 export async function getFaqs(): Promise<Faq[]> {
   return client.fetch(
-    groq`*[_type == "faq"] | order(_createdAt asc){
+    groq`*[_type == "faq" && published == true] | order(category asc, _createdAt asc){
       _id,
       question,
       answer,
@@ -162,7 +193,7 @@ export async function getFaqs(): Promise<Faq[]> {
 
 export async function getSlideItems(): Promise<SlideItem[]> {
   return client.fetch(
-    groq`*[_type == "slideItem"]{
+    groq`*[_type == "slideItem"] | order(_createdAt asc){
       _id,
       title,
       subtitle,
