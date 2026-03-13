@@ -1,3 +1,4 @@
+
 {
   "auth": {
     "login": {
@@ -170,5 +171,20 @@
     "settings": "Settings",
     "adminPanel": "Admin Panel",
     "signOut": "Sign out"
+  },
+  "courses": {
+    "specialize": "Specialize in TESOL with TEFL Tuscany in beautiful Italy",
+    "intro": "Our extensive TEFL courses are tailored to empower instructors from various walks of life, whether you are aiming to teach remotely or set off on a globetrotting educational expedition.",
+    "noCourses": "No courses available at the moment.",
+    "aboutCourse": "About this course",
+    "noDescription": "No description available.",
+    "price": "Price",
+    "dates": "Dates",
+    "completion": "Completion time",
+    "weeks": "weeks",
+    "level": "Level",
+    "maxStudents": "Max students",
+    "applyNow": "Apply Now",
+    "backToCourses": "All courses"
   }
 }

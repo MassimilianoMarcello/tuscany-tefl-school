@@ -222,3 +222,21 @@ export async function getHomePage(): Promise<HomePage | null> {
     }`
   )
 }
+
+export type CommonTopPage = {
+  _id: string
+  title: string
+  subtitle?: string
+  backgroundImage?: string
+}
+
+export async function getCommonTopPage(): Promise<CommonTopPage | null> {
+  return client.fetch(
+    groq`*[_type == "commonTopPage"][0]{
+      _id,
+      title,
+      subtitle,
+      "backgroundImage": backgroundImage.asset->url
+    }`
+  )
+}

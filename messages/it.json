@@ -170,5 +170,20 @@
     "settings": "Impostazioni",
     "adminPanel": "Pannello Admin",
     "signOut": "Esci"
+  },
+  "courses": {
+    "specialize": "Specializzati in TESOL con TEFL Tuscany in Italia",
+    "intro": "I nostri corsi TEFL sono progettati per insegnanti di ogni livello, che tu voglia insegnare online o in giro per il mondo.",
+    "noCourses": "Nessun corso disponibile al momento.",
+    "aboutCourse": "Il corso",
+    "noDescription": "Descrizione non disponibile.",
+    "price": "Prezzo",
+    "dates": "Date",
+    "completion": "Durata",
+    "weeks": "settimane",
+    "level": "Livello",
+    "maxStudents": "Max studenti",
+    "applyNow": "Candidati ora",
+    "backToCourses": "Tutti i corsi"
   }
 }
