@@ -209,5 +209,30 @@
     "noContent": "Content not available.",
     "ctaTitle": "Ready to start your TEFL journey?",
     "ctaButton": "Apply Now"
+  },
+  "footer": {
+    "quickLinks": "Quick Links",
+    "information": "Information",
+    "newsletter": "Newsletter",
+    "newsletterSub": "Subscribe to receive updates about our courses and news from Tuscany.",
+    "newsletterSuccess": "Thank you! We'll be in touch soon.",
+    "emailPlaceholder": "Your email",
+    "subscribe": "Subscribe",
+    "whatsapp": "Chat with us on WhatsApp",
+    "links": {
+      "courses": "Our Courses",
+      "teachers": "Meet the Team",
+      "aboutUs": "About Us",
+      "faq": "FAQ",
+      "datesAndPrices": "Dates & Prices",
+      "application": "Course Application",
+      "testimonials": "Testimonials",
+      "accredited": "Accredited",
+      "workInItaly": "Work in Italy",
+      "internship": "Internship",
+      "podcast": "Podcast",
+      "consultation": "Consultation",
+      "contact": "Contact Us"
+    }
   }
 }

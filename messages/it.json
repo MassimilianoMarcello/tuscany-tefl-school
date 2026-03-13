@@ -209,5 +209,30 @@
     "noContent": "Contenuto non disponibile.",
     "ctaTitle": "Pronto a iniziare il tuo percorso TEFL?",
     "ctaButton": "Candidati ora"
+  },
+  "footer": {
+    "quickLinks": "Link Rapidi",
+    "information": "Informazioni",
+    "newsletter": "Newsletter",
+    "newsletterSub": "Iscriviti per ricevere aggiornamenti sui nostri corsi e novità dalla Toscana.",
+    "newsletterSuccess": "Grazie! Ti contatteremo presto.",
+    "emailPlaceholder": "La tua email",
+    "subscribe": "Iscriviti",
+    "whatsapp": "Scrivici su WhatsApp",
+    "links": {
+      "courses": "I nostri corsi",
+      "teachers": "Il nostro team",
+      "aboutUs": "Chi siamo",
+      "faq": "FAQ",
+      "datesAndPrices": "Date e prezzi",
+      "application": "Candidatura",
+      "testimonials": "Testimonianze",
+      "accredited": "Accreditamenti",
+      "workInItaly": "Lavorare in Italia",
+      "internship": "Stage",
+      "podcast": "Podcast",
+      "consultation": "Consulenza",
+      "contact": "Contatti"
+    }
   }
 }
