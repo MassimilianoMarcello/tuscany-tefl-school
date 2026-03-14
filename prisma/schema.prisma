@@ -92,3 +92,68 @@ model Verification {
   @@index([identifier])
   @@map("verification")
 }
+enum ApplicationStatus {
+  PENDING
+  REVIEWED
+  ACCEPTED
+  REJECTED
+}
+
+enum CourseType {
+  TESOL_TEFL_CERTIFICATION
+  ONLINE_DISTANCE_TESOL_TEFL
+}
+
+enum Location {
+  TUSCANY
+  URUGUAY
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+  PREFER_NOT_TO_SAY
+}
+
+model Application {
+  id        String            @id @default(uuid())
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
+  status    ApplicationStatus @default(PENDING)
+
+  courseType  CourseType
+  location    Location
+  firstName   String
+  lastName    String
+  gender      Gender
+  dateOfBirth DateTime
+  email       String
+  address     String
+  city        String
+  postCode    String
+  country     String
+  phone                   String
+  fax                     String?
+  skype                   String?
+  nativeEnglishSpeaker    Boolean
+  currentProfession       String?
+  focusOfStudies          String?
+  university              String?
+  passportsHeld           String?
+  previousTeachingExp     String?
+  requiresAccommodation   Boolean  @default(false)
+  specialRequirements     String?
+  hasDyslexia             Boolean  @default(false)
+  psychologicalDisorder   String?
+  healthCondition         String?
+  suitableToTeachChildren Boolean  @default(true)
+  specialNeeds            String?
+  criminalOffense         Boolean  @default(false)
+  motivation              String
+  additionalComments      String?
+  termsAccepted           Boolean  @default(false)
+  dataConsent             Boolean  @default(false)
+
+  @@map("application")
+}
