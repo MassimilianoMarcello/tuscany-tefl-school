@@ -40,6 +40,7 @@ import { authClient } from "@/lib/auth-client"
 import { useTranslations } from "next-intl"
 import { useRouter } from "next/navigation"
 import type { UserWithRole } from "@/types/prisma"
+import { useLayoutEffect as reactUseLayoutEffect } from "react"
 
 // Links defined inside components to use translations — see mainLinks() and secondaryLinks()
 
@@ -62,10 +63,13 @@ function getInitials(name?: string | null, email?: string | null): string {
 
 // ─── UserMenu desktop ─────────────────────────────────────────────────────────
 function UserMenu({ locale }: { locale: string }) {
+  const [mounted, setMounted] = useState(false)         // ← aggiungi
   const { data: session, isPending } = authClient.useSession()
   const router = useRouter()
   const t = useTranslations("navigation")
   const user = session?.user as UserWithRole | undefined
+
+  useLayoutEffect(() => { setMounted(true) }, [])            // ← aggiungi
 
   async function handleLogout() {
     await authClient.signOut()
@@ -73,7 +77,7 @@ function UserMenu({ locale }: { locale: string }) {
     router.refresh()
   }
 
-  if (isPending) {
+  if (!mounted || isPending) {                          // ← modifica
     return <div className="h-8 w-8 rounded-full bg-brand-azure animate-pulse" />
   }
 
@@ -256,7 +260,7 @@ export function Navbar({ locale }: NavbarProps) {
   ]
 
   const secondaryLinks = [
-    { label: t("accredited"), href: "/accredited" },
+    { label: t("calendar"), href: "/calendar" },
     { label: t("workInItaly"), href: "/work-in-italy" },
     { label: t("internship"), href: "/internship" },
     { label: t("podcast"), href: "/podcast" },
@@ -496,3 +500,4 @@ export function Navbar({ locale }: NavbarProps) {
     </header>
   )
 }
+const useLayoutEffect = typeof window !== "undefined" ? reactUseLayoutEffect : () => {}
