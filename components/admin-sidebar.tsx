@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/sidebar"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { authClient } from "@/lib/auth-client"
-import { LayoutDashboard, Users, LogOut, ShieldCheck } from "lucide-react"
+import { LayoutDashboard, Users, LogOut, ShieldCheck, FileText } from "lucide-react"
 
 interface AdminSidebarProps {
   user?: {
@@ -35,6 +35,7 @@ export function AdminSidebar({ user }: AdminSidebarProps) {
   const navItems = [
     { label: t("nav.overview"), href: `/${locale}/admin`, icon: LayoutDashboard },
     { label: t("nav.users"), href: `/${locale}/admin/users`, icon: Users },
+    { label: t("nav.content"), href: `/${locale}/admin/content`, icon: FileText },
   ]
 
   const initials = user?.name

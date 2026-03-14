@@ -125,7 +125,8 @@
     "nav": {
       "label": "Management",
       "overview": "Overview",
-      "users": "Users"
+      "users": "Users",
+      "content": "Content Management"
     },
     "overview": {
       "title": "Overview",
@@ -155,7 +156,7 @@
     "reviews": "Reviews",
     "faq": "FAQ",
     "more": "More",
-    "calendar": "Course Calendar",
+    "accredited": "Accredited",
     "workInItaly": "Work in Italy",
     "internship": "Internship",
     "podcast": "Podcast",
@@ -169,7 +170,8 @@
     "dashboard": "Dashboard",
     "settings": "Settings",
     "adminPanel": "Admin Panel",
-    "signOut": "Sign out"
+    "signOut": "Sign out",
+    "calendar": "Calendar"
   },
   "courses": {
     "specialize": "Specialize in TESOL with TEFL Tuscany in beautiful Italy",
@@ -202,7 +204,8 @@
     "categories": {
       "general": "General Questions",
       "technical": "Paperwork and Documentation",
-      "living": "Living in Italy"
+      "living": "Living in Italy",
+      "living costs": "Living in Italy"
     }
   },
   "aboutUs": {

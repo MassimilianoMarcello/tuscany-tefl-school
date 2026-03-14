@@ -125,7 +125,8 @@
     "nav": {
       "label": "Gestione",
       "overview": "Panoramica",
-      "users": "Utenti"
+      "users": "Utenti",
+      "content": "Gestione Contenuti"
     },
     "overview": {
       "title": "Panoramica",
@@ -169,7 +170,8 @@
     "dashboard": "Dashboard",
     "settings": "Impostazioni",
     "adminPanel": "Pannello Admin",
-    "signOut": "Esci"
+    "signOut": "Esci",
+    "calendar": "Calendario"
   },
   "courses": {
     "specialize": "Specializzati in TESOL con TEFL Tuscany in Italia",
@@ -202,7 +204,8 @@
     "categories": {
       "general": "Domande Generali",
       "technical": "Documenti e Burocrazia",
-      "living": "Vivere in Italia"
+      "living": "Vivere in Italia",
+      "living costs": "Vivere in Italia"
     }
   },
   "aboutUs": {
@@ -227,7 +230,7 @@
       "datesAndPrices": "Date e prezzi",
       "application": "Candidatura",
       "testimonials": "Testimonianze",
-      "calendar": "Calendario dei Corsi",
+      "accredited": "Accreditamenti",
       "workInItaly": "Lavorare in Italia",
       "internship": "Stage",
       "podcast": "Podcast",
