@@ -135,4 +135,15 @@
   body {
     @apply bg-background text-foreground;
   }
+  .phone-input .PhoneInputInput {
+  border: 2px solid var(--color-brand-azure);
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  color: var(--color-brand-blue);
+  outline: none;
+  width: 100%;
+}
+.phone-input .PhoneInputInput:focus {
+  border-color: var(--color-brand-blue);
+}
 }
