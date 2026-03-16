@@ -1,10 +1,10 @@
 "use client"
 
 // components/navbar.tsx
-import { useState, useEffect } from "react"
+import { useState, useEffect, useLayoutEffect as reactUseLayoutEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
-import { Phone, Menu, LogOut, Settings, LayoutDashboard, Shield, Globe } from "lucide-react"
+import { Phone, Menu, LogOut, Settings, LayoutDashboard, Shield, Globe, X } from "lucide-react"
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -14,13 +14,6 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu"
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -34,21 +27,19 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { authClient } from "@/lib/auth-client"
 import { useTranslations } from "next-intl"
 import { useRouter } from "next/navigation"
 import type { UserWithRole } from "@/types/prisma"
-import { useLayoutEffect as reactUseLayoutEffect } from "react"
 
-// Links defined inside components to use translations — see mainLinks() and secondaryLinks()
+const useLayoutEffect =
+  typeof window !== "undefined" ? reactUseLayoutEffect : () => {}
 
 interface NavbarProps {
   locale: string
 }
 
-// ─── Helper iniziali avatar ───────────────────────────────────────────────────
 function getInitials(name?: string | null, email?: string | null): string {
   if (name) {
     return name
@@ -63,13 +54,13 @@ function getInitials(name?: string | null, email?: string | null): string {
 
 // ─── UserMenu desktop ─────────────────────────────────────────────────────────
 function UserMenu({ locale }: { locale: string }) {
-  const [mounted, setMounted] = useState(false)         // ← aggiungi
+  const [mounted, setMounted] = useState(false)
   const { data: session, isPending } = authClient.useSession()
   const router = useRouter()
   const t = useTranslations("navigation")
   const user = session?.user as UserWithRole | undefined
 
-  useLayoutEffect(() => { setMounted(true) }, [])            // ← aggiungi
+  useLayoutEffect(() => { setMounted(true) }, [])
 
   async function handleLogout() {
     await authClient.signOut()
@@ -77,28 +68,25 @@ function UserMenu({ locale }: { locale: string }) {
     router.refresh()
   }
 
-  if (!mounted || isPending) {                          // ← modifica
-    return <div className="h-8 w-8 rounded-full bg-brand-azure animate-pulse" />
+  if (!mounted || isPending) {
+    return <div className="h-7 w-7 rounded-full bg-white/20 animate-pulse" />
   }
 
   if (!session) {
     return (
-      <div className="flex items-center gap-2">
-        <Button
-          asChild
-          variant="ghost"
-          size="sm"
-          className="uppercase text-xs font-semibold tracking-wide text-brand-blue hover:text-brand-green"
+      <div className="flex items-center gap-3">
+        <Link
+          href={`/${locale}/login`}
+          className="text-[10px] uppercase tracking-widest font-bold text-white/70 hover:text-white transition-colors"
         >
-          <Link href={`/${locale}/login`}>{t("signIn")}</Link>
-        </Button>
-        <Button
-          asChild
-          size="sm"
-          className="uppercase text-xs font-bold tracking-wide bg-brand-green hover:bg-brand-green-dark text-white"
+          {t("signIn")}
+        </Link>
+        <Link
+          href={`/${locale}/register`}
+          className="text-[10px] uppercase tracking-widest font-bold bg-brand-gold text-brand-blue px-3 py-1.5 hover:bg-white transition-colors"
         >
-          <Link href={`/${locale}/register`}>{t("register")}</Link>
-        </Button>
+          {t("register")}
+        </Link>
       </div>
     )
   }
@@ -106,30 +94,30 @@ function UserMenu({ locale }: { locale: string }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <button className="rounded-full ring-2 ring-brand-azure hover:ring-brand-green transition-all focus:outline-none">
-          <Avatar className="h-8 w-8 cursor-pointer">
+        <button className="rounded-full ring-1 ring-white/30 hover:ring-brand-gold transition-all focus:outline-none">
+          <Avatar className="h-7 w-7 cursor-pointer">
             <AvatarImage src={user?.image ?? undefined} alt={user?.name ?? "User"} />
-            <AvatarFallback className="bg-brand-blue text-white text-xs font-bold">
+            <AvatarFallback className="bg-brand-azure text-brand-blue text-[10px] font-black">
               {getInitials(user?.name, user?.email)}
             </AvatarFallback>
           </Avatar>
         </button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-52">
+      <DropdownMenuContent align="end" className="w-52 rounded-none border-brand-blue/20">
         <DropdownMenuLabel className="flex flex-col gap-0.5">
-          <span className="font-semibold text-brand-blue">{user?.name ?? "User"}</span>
+          <span className="font-bold text-brand-blue text-sm">{user?.name ?? "User"}</span>
           <span className="text-xs text-muted-foreground font-normal truncate">{user?.email}</span>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
-          <Link href={`/${locale}/dashboard`} className="flex items-center gap-2 cursor-pointer">
-            <LayoutDashboard className="h-4 w-4" />
+          <Link href={`/${locale}/dashboard`} className="flex items-center gap-2 cursor-pointer text-xs uppercase tracking-wide">
+            <LayoutDashboard className="h-3.5 w-3.5" />
             {t("dashboard")}
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
-          <Link href={`/${locale}/dashboard/settings`} className="flex items-center gap-2 cursor-pointer">
-            <Settings className="h-4 w-4" />
+          <Link href={`/${locale}/dashboard/settings`} className="flex items-center gap-2 cursor-pointer text-xs uppercase tracking-wide">
+            <Settings className="h-3.5 w-3.5" />
             {t("settings")}
           </Link>
         </DropdownMenuItem>
@@ -139,9 +127,9 @@ function UserMenu({ locale }: { locale: string }) {
             <DropdownMenuItem asChild>
               <Link
                 href={`/${locale}/admin`}
-                className="flex items-center gap-2 cursor-pointer text-brand-green"
+                className="flex items-center gap-2 cursor-pointer text-xs uppercase tracking-wide text-brand-green"
               >
-                <Shield className="h-4 w-4" />
+                <Shield className="h-3.5 w-3.5" />
                 {t("adminPanel")}
               </Link>
             </DropdownMenuItem>
@@ -150,9 +138,9 @@ function UserMenu({ locale }: { locale: string }) {
         <DropdownMenuSeparator />
         <DropdownMenuItem
           onClick={handleLogout}
-          className="flex items-center gap-2 cursor-pointer text-destructive focus:text-destructive"
+          className="flex items-center gap-2 cursor-pointer text-xs uppercase tracking-wide text-destructive focus:text-destructive"
         >
-          <LogOut className="h-4 w-4" />
+          <LogOut className="h-3.5 w-3.5" />
           {t("signOut")}
         </DropdownMenuItem>
       </DropdownMenuContent>
@@ -160,93 +148,10 @@ function UserMenu({ locale }: { locale: string }) {
   )
 }
 
-// ─── UserMenu mobile ──────────────────────────────────────────────────────────
-function UserMenuMobile({ locale, onClose }: { locale: string; onClose: () => void }) {
-  const { data: session, isPending } = authClient.useSession()
-  const router = useRouter()
-  const t = useTranslations("navigation")
-  const user = session?.user as UserWithRole | undefined
-
-  async function handleLogout() {
-    await authClient.signOut()
-    onClose()
-    router.push(`/${locale}/login`)
-    router.refresh()
-  }
-
-  if (isPending) return null
-
-  if (!session) {
-    return (
-      <div className="flex flex-col gap-2 px-3 mt-4">
-        <Button
-          asChild
-          variant="outline"
-          className="uppercase text-xs font-bold border-2 border-brand-blue text-brand-blue"
-        >
-          <Link href={`/${locale}/login`} onClick={onClose}>{t("signIn")}</Link>
-        </Button>
-        <Button
-          asChild
-          className="uppercase text-xs font-bold bg-brand-green hover:bg-brand-green-dark text-white"
-        >
-          <Link href={`/${locale}/register`} onClick={onClose}>{t("register")}</Link>
-        </Button>
-      </div>
-    )
-  }
-
-  return (
-    <div className="px-3 mt-4 border-t pt-4">
-      <div className="flex items-center gap-3 mb-3">
-        <Avatar className="h-9 w-9">
-          <AvatarImage src={user?.image ?? undefined} />
-          <AvatarFallback className="bg-brand-blue text-white text-xs font-bold">
-            {getInitials(user?.name, user?.email)}
-          </AvatarFallback>
-        </Avatar>
-        <div className="flex flex-col">
-          <span className="text-sm font-semibold text-brand-blue">{user?.name}</span>
-          <span className="text-xs text-muted-foreground truncate">{user?.email}</span>
-        </div>
-      </div>
-      <Link
-        href={`/${locale}/dashboard`}
-        onClick={onClose}
-        className="flex items-center gap-2 rounded-md px-2 py-2 text-sm hover:bg-brand-bg text-brand-blue transition-colors"
-      >
-        <LayoutDashboard className="h-4 w-4" /> {t("dashboard")}
-      </Link>
-      <Link
-        href={`/${locale}/dashboard/settings`}
-        onClick={onClose}
-        className="flex items-center gap-2 rounded-md px-2 py-2 text-sm hover:bg-brand-bg text-brand-blue transition-colors"
-      >
-        <Settings className="h-4 w-4" /> {t("settings")}
-      </Link>
-      {user?.role === "ADMIN" && (
-        <Link
-          href={`/${locale}/admin`}
-          onClick={onClose}
-          className="flex items-center gap-2 rounded-md px-2 py-2 text-sm hover:bg-brand-bg text-brand-green transition-colors"
-        >
-          <Shield className="h-4 w-4" /> {t("adminPanel")}
-        </Link>
-      )}
-      <button
-        onClick={handleLogout}
-        className="flex items-center gap-2 rounded-md px-2 py-2 text-sm text-destructive hover:bg-red-50 transition-colors w-full mt-1"
-      >
-        <LogOut className="h-4 w-4" /> {t("signOut")}
-      </button>
-    </div>
-  )
-}
-
-
-// Navbar principale
+// ─── Navbar principale ────────────────────────────────────────────────────────
 export function Navbar({ locale }: NavbarProps) {
   const [scrolled, setScrolled] = useState(false)
+  const [topBarVisible, setTopBarVisible] = useState(true)
   const [mobileOpen, setMobileOpen] = useState(false)
   const router = useRouter()
   const t = useTranslations("navigation")
@@ -270,12 +175,22 @@ export function Navbar({ locale }: NavbarProps) {
   ]
 
   useEffect(() => {
+    let lastY = window.scrollY
     function handleScroll() {
-      setScrolled(window.scrollY > 60)
+      const currentY = window.scrollY
+      setScrolled(currentY > 60)
+      setTopBarVisible(currentY < 40 || currentY < lastY)
+      lastY = currentY
     }
-    window.addEventListener("scroll", handleScroll)
+    window.addEventListener("scroll", handleScroll, { passive: true })
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
+
+  // Blocca scroll body quando mobile menu è aperto
+  useEffect(() => {
+    document.body.style.overflow = mobileOpen ? "hidden" : ""
+    return () => { document.body.style.overflow = "" }
+  }, [mobileOpen])
 
   function localHref(href: string) {
     return `/${locale}${href}`
@@ -292,58 +207,69 @@ export function Navbar({ locale }: NavbarProps) {
   return (
     <header className="w-full z-50 sticky top-0">
 
-      {/* Top bar azzurro */}
-      <div className="hidden md:flex items-center justify-between px-8 py-1.5 text-xs bg-brand-azure text-brand-blue">
-        <div className="flex items-center gap-2 font-medium">
+      {/* ── Top bar — brand-blue, scompare allo scroll ────────── */}
+      <div
+        className={cn(
+          "hidden md:flex items-center justify-between px-8 bg-brand-blue transition-all duration-300 overflow-hidden",
+          topBarVisible ? "py-1.5 opacity-100 max-h-10" : "py-0 opacity-0 max-h-0"
+        )}
+      >
+        <div className="flex items-center gap-2 text-[10px] uppercase tracking-widest font-bold text-white/50">
           <Phone className="h-3 w-3" />
-          <span>Call us: +39 055 849 5765</span>
+          <span>+39 055 849 5765</span>
         </div>
-        <div className="flex items-center gap-5 uppercase font-medium tracking-wide">
+        <div className="flex items-center gap-5">
           {secondaryLinks.slice(0, 4).map((link) => (
             <Link
               key={link.href}
               href={localHref(link.href)}
-              className="hover:text-brand-green transition-colors"
+              className="text-[10px] uppercase tracking-widest font-bold text-white/50 hover:text-brand-gold transition-colors"
             >
               {link.label}
             </Link>
           ))}
-          <div className="w-px h-3 bg-brand-blue/30" />
+          <div className="w-px h-3 bg-white/10" />
           <button
             onClick={handleLanguageSwitch}
-            className="flex items-center gap-1 w-12 justify-center hover:text-brand-green transition-colors"
+            className="flex items-center gap-1.5 text-[10px] uppercase tracking-widest font-bold text-white/50 hover:text-brand-gold transition-colors"
           >
             <Globe className="h-3 w-3" />
             {t("switchLanguage")}
           </button>
-          <div className="w-px h-3 bg-brand-blue/30" />
+          <div className="w-px h-3 bg-white/10" />
           <UserMenu locale={locale} />
         </div>
       </div>
 
-      {/* Main bar */}
+      {/* ── Main bar ──────────────────────────────────────────── */}
       <div
         className={cn(
-          "w-full transition-all duration-300 border-b-4 border-brand-blue",
-          scrolled ? "shadow-md bg-brand-bg" : "bg-white"
+          "w-full transition-all duration-300 border-b-[3px] border-brand-gold",
+       scrolled
+      ? "bg-white shadow-[0_4px_24px_rgba(31,61,75,0.08)]"
+      : "bg-white"
+
         )}
       >
-        <div className="flex items-center justify-between px-6 py-3 max-w-7xl mx-auto">
+        <div className="flex items-center justify-between px-6 py-2 max-w-7xl mx-auto">
 
           {/* Logo */}
           <Link href={localHref("/")} className="shrink-0">
             <Image
               src="/assets/Tuscany_logo6.webp"
               alt="Tuscany TEFL School"
-              width={200}
-              height={60}
-              className="h-14 w-auto object-contain"
+              width={180}
+              height={54}
+              className={cn(
+                "w-auto object-contain transition-all duration-300",
+                scrolled ? "h-10" : "h-12"
+              )}
               priority
             />
           </Link>
 
-          {/* Desktop nav */}
-          <div className="hidden lg:flex items-center gap-2">
+          {/* ── Desktop nav ───────────────────────────────────── */}
+          <div className="hidden lg:flex items-center gap-1">
             <NavigationMenu>
               <NavigationMenuList>
                 {mainLinks.map((link) => (
@@ -352,7 +278,7 @@ export function Navbar({ locale }: NavbarProps) {
                       href={localHref(link.href)}
                       className={cn(
                         navigationMenuTriggerStyle(),
-                        "uppercase text-xs font-semibold tracking-wide text-brand-blue hover:text-brand-green"
+                        "uppercase text-[10px] font-black tracking-widest text-brand-blue hover:text-brand-green bg-transparent hover:bg-transparent focus:bg-transparent rounded-none"
                       )}
                     >
                       {link.label}
@@ -362,21 +288,23 @@ export function Navbar({ locale }: NavbarProps) {
               </NavigationMenuList>
             </NavigationMenu>
 
-            {/* More — NavigationMenu separato per posizionamento corretto */}
+            {/* More dropdown */}
             <NavigationMenu>
               <NavigationMenuList>
                 <NavigationMenuItem>
-                  <NavigationMenuTrigger className="uppercase text-xs font-semibold tracking-wide text-brand-blue hover:text-brand-green">
+                  <NavigationMenuTrigger
+                    className="uppercase text-[10px] font-black tracking-widest text-brand-blue hover:text-brand-green bg-transparent hover:bg-transparent rounded-none"
+                  >
                     {t("more")}
                   </NavigationMenuTrigger>
                   <NavigationMenuContent>
-                    <ul className="w-52 gap-1 p-2">
+                    <ul className="w-56 p-2 rounded-none">
                       {secondaryLinks.map((link) => (
                         <li key={link.href}>
                           <NavigationMenuLink asChild>
                             <Link
                               href={localHref(link.href)}
-                              className="block rounded-md px-3 py-2 text-sm uppercase tracking-wide text-brand-blue hover:bg-brand-bg hover:text-brand-green transition-colors"
+                              className="block px-3 py-2 text-[10px] uppercase tracking-widest font-bold text-brand-blue hover:bg-brand-bg hover:text-brand-green transition-colors"
                             >
                               {link.label}
                             </Link>
@@ -389,115 +317,224 @@ export function Navbar({ locale }: NavbarProps) {
               </NavigationMenuList>
             </NavigationMenu>
 
-            {/* CTA + auth */}
-            <div className="flex items-center gap-3 ml-4">
-              <Button
-                asChild
-                variant="outline"
-                size="sm"
-                className="uppercase text-xs font-bold tracking-wide border-2 border-brand-gold text-brand-blue hover:bg-brand-gold transition-colors"
+            {/* CTA */}
+            <div className="flex items-center gap-2 ml-4 border-l border-brand-blue/10 pl-4">
+              <Link
+                href={localHref("/our_courses")}
+                className="text-[10px] uppercase tracking-widest font-black text-brand-blue border-2 border-brand-gold px-4 py-2 hover:bg-brand-gold transition-colors duration-200"
               >
-                <Link href={localHref("/our_courses")}>{t("datesAndPrices")}</Link>
-              </Button>
-              <Button
-                asChild
-                size="sm"
-                className="uppercase text-xs font-bold tracking-wide bg-brand-green hover:bg-brand-green-dark text-white"
+                {t("datesAndPrices")}
+              </Link>
+              <Link
+                href={localHref("/apply")}
+                className="text-[10px] uppercase tracking-widest font-black text-white bg-brand-green px-4 py-2 hover:bg-brand-green-dark transition-colors duration-200"
               >
-                <Link href={localHref("/apply")}>{t("applyNow")}</Link>
-              </Button>
+                {t("applyNow")}
+              </Link>
             </div>
           </div>
 
-          {/* Mobile hamburger */}
-          <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
-            <SheetTrigger asChild className="lg:hidden">
-              <Button variant="ghost" size="icon">
-                <Menu className="h-6 w-6 text-brand-blue" />
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="right" className="w-72 overflow-y-auto">
-              <SheetHeader className="mb-4">
-                <SheetTitle>
-                  <Image
-                    src="/assets/Tuscany_logo6.webp"
-                    alt="Tuscany TEFL School"
-                    width={140}
-                    height={45}
-                    className="h-10 w-auto object-contain"
-                  />
-                </SheetTitle>
-              </SheetHeader>
-
-              <div className="flex flex-col gap-1">
-                <p className="text-xs font-bold uppercase tracking-widest text-brand-blue px-3 mb-1">
-                  Menu
-                </p>
-                {mainLinks.map((link) => (
-                  <Link
-                    key={link.href}
-                    href={localHref(link.href)}
-                    onClick={() => setMobileOpen(false)}
-                    className="block rounded-md px-3 py-2 text-sm uppercase tracking-wide text-brand-blue hover:bg-brand-bg hover:text-brand-green transition-colors"
-                  >
-                    {link.label}
-                  </Link>
-                ))}
-
-                <p className="text-xs font-bold uppercase tracking-widest text-brand-blue px-3 mt-4 mb-1">
-                  More
-                </p>
-                {secondaryLinks.map((link) => (
-                  <Link
-                    key={link.href}
-                    href={localHref(link.href)}
-                    onClick={() => setMobileOpen(false)}
-                    className="block rounded-md px-3 py-2 text-sm uppercase tracking-wide text-brand-blue hover:bg-brand-bg hover:text-brand-green transition-colors"
-                  >
-                    {link.label}
-                  </Link>
-                ))}
-
-                <div className="flex flex-col gap-2 mt-6 px-3">
-                  <Button
-                    asChild
-                    variant="outline"
-                    className="uppercase text-xs font-bold border-2 border-brand-gold text-brand-blue hover:bg-brand-gold"
-                  >
-                    <Link href={localHref("/our_courses")} onClick={() => setMobileOpen(false)}>
-                      Dates & Prices
-                    </Link>
-                  </Button>
-                  <Button
-                    asChild
-                    className="uppercase text-xs font-bold bg-brand-green hover:bg-brand-green-dark text-white"
-                  >
-                    <Link href={localHref("/apply")} onClick={() => setMobileOpen(false)}>
-                      Apply Now
-                    </Link>
-                  </Button>
-                </div>
-
-                <UserMenuMobile locale={locale} onClose={() => setMobileOpen(false)} />
-
-                <button
-                  onClick={handleLanguageSwitch}
-                  className="flex items-center gap-2 rounded-md px-3 py-2 text-sm uppercase font-semibold text-brand-blue hover:bg-brand-bg transition-colors mt-2 mx-0"
-                >
-                  <Globe className="h-4 w-4" />
-                  {t("switchLanguage")}
-                </button>
-
-                <div className="flex items-center gap-2 mt-4 px-3 text-sm text-brand-blue border-t pt-4">
-                  <Phone className="h-3 w-3" />
-                  <span>+39 055 849 5765</span>
-                </div>
-              </div>
-            </SheetContent>
-          </Sheet>
+          {/* ── Mobile hamburger ──────────────────────────────── */}
+          <button
+            className="lg:hidden flex items-center justify-center w-10 h-10 text-brand-blue hover:text-brand-green transition-colors"
+            onClick={() => setMobileOpen(true)}
+            aria-label="Apri menu"
+          >
+            <Menu className="h-5 w-5" />
+          </button>
         </div>
       </div>
+
+      {/* ── Mobile menu — fullscreen overlay ─────────────────── */}
+      <div
+        className={cn(
+          "fixed inset-0 z-[100] lg:hidden flex flex-col transition-all duration-300",
+          mobileOpen
+            ? "opacity-100 pointer-events-auto"
+            : "opacity-0 pointer-events-none"
+        )}
+      >
+        {/* Header mobile — brand-blue */}
+        <div className="bg-brand-blue px-6 py-4 flex items-center justify-between border-b-[3px] border-brand-gold shrink-0">
+          <Image
+            src="/assets/Tuscany_logo6.webp"
+            alt="Tuscany TEFL School"
+            width={140}
+            height={42}
+            className="h-9 w-auto object-contain brightness-0 invert"
+          />
+          <button
+            onClick={() => setMobileOpen(false)}
+            className="text-white/60 hover:text-white transition-colors"
+            aria-label="Chiudi menu"
+          >
+            <X className="h-5 w-5" />
+          </button>
+        </div>
+
+        {/* Body mobile — scrollabile */}
+        <div className="bg-brand-bg flex-1 overflow-y-auto">
+          <div className="px-6 py-8 flex flex-col gap-1">
+
+            {/* Main links */}
+            <p className="text-[9px] uppercase tracking-[0.3em] font-black text-brand-blue/30 mb-3">
+              Menu
+            </p>
+            {mainLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={localHref(link.href)}
+                onClick={() => setMobileOpen(false)}
+                className="block py-3 border-b border-brand-blue/5 text-xs uppercase tracking-widest font-black text-brand-blue hover:text-brand-green transition-colors"
+              >
+                {link.label}
+              </Link>
+            ))}
+
+            {/* Secondary links */}
+            <p className="text-[9px] uppercase tracking-[0.3em] font-black text-brand-blue/30 mt-6 mb-3">
+              More
+            </p>
+            {secondaryLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={localHref(link.href)}
+                onClick={() => setMobileOpen(false)}
+                className="block py-3 border-b border-brand-blue/5 text-xs uppercase tracking-widest font-bold text-brand-blue/70 hover:text-brand-green transition-colors"
+              >
+                {link.label}
+              </Link>
+            ))}
+
+            {/* CTA mobile */}
+            <div className="flex flex-col gap-3 mt-8">
+              <Link
+                href={localHref("/our_courses")}
+                onClick={() => setMobileOpen(false)}
+                className="text-center text-[10px] uppercase tracking-widest font-black text-brand-blue border-2 border-brand-gold px-6 py-4 hover:bg-brand-gold transition-colors"
+              >
+                {t("datesAndPrices")}
+              </Link>
+              <Link
+                href={localHref("/apply")}
+                onClick={() => setMobileOpen(false)}
+                className="text-center text-[10px] uppercase tracking-widest font-black text-white bg-brand-green px-6 py-4 hover:bg-brand-green-dark transition-colors"
+              >
+                {t("applyNow")}
+              </Link>
+            </div>
+
+            {/* Language switch */}
+            <button
+              onClick={() => { handleLanguageSwitch(); setMobileOpen(false) }}
+              className="flex items-center gap-2 mt-6 text-[10px] uppercase tracking-widest font-bold text-brand-blue/50 hover:text-brand-green transition-colors"
+            >
+              <Globe className="h-3.5 w-3.5" />
+              {t("switchLanguage")}
+            </button>
+
+            {/* Phone */}
+            <div className="flex items-center gap-2 mt-4 text-[10px] uppercase tracking-widest text-brand-blue/30">
+              <Phone className="h-3 w-3" />
+              <span>+39 055 849 5765</span>
+            </div>
+
+            {/* Auth mobile — in fondo */}
+            <MobileAuth locale={locale} onClose={() => setMobileOpen(false)} />
+
+          </div>
+        </div>
+      </div>
+
     </header>
   )
 }
-const useLayoutEffect = typeof window !== "undefined" ? reactUseLayoutEffect : () => {}
+
+// ─── Auth mobile — estratto ───────────────────────────────────────────────────
+function MobileAuth({ locale, onClose }: { locale: string; onClose: () => void }) {
+  const { data: session, isPending } = authClient.useSession()
+  const router = useRouter()
+  const t = useTranslations("navigation")
+  const user = session?.user as UserWithRole | undefined
+
+  async function handleLogout() {
+    await authClient.signOut()
+    onClose()
+    router.push(`/${locale}/login`)
+    router.refresh()
+  }
+
+  if (isPending) return null
+
+  if (!session) {
+    return (
+      <div className="flex flex-col gap-2 mt-8 pt-6 border-t border-brand-blue/10">
+        <Link
+          href={`/${locale}/login`}
+          onClick={onClose}
+          className="text-center text-[10px] uppercase tracking-widest font-black text-brand-blue border-2 border-brand-blue/20 px-6 py-4 hover:border-brand-blue transition-colors"
+        >
+          {t("signIn")}
+        </Link>
+        <Link
+          href={`/${locale}/register`}
+          onClick={onClose}
+          className="text-center text-[10px] uppercase tracking-widest font-black text-brand-blue bg-brand-gold px-6 py-4 hover:bg-white transition-colors"
+        >
+          {t("register")}
+        </Link>
+      </div>
+    )
+  }
+
+  return (
+    <div className="mt-8 pt-6 border-t border-brand-blue/10">
+      <div className="flex items-center gap-3 mb-4">
+        <Avatar className="h-9 w-9 shrink-0">
+          <AvatarImage src={user?.image ?? undefined} />
+          <AvatarFallback className="bg-brand-blue text-white text-xs font-black">
+            {getInitials(user?.name, user?.email)}
+          </AvatarFallback>
+        </Avatar>
+        <div>
+          <p className="text-sm font-black text-brand-blue">{user?.name}</p>
+          <p className="text-[10px] text-brand-blue/40 truncate">{user?.email}</p>
+        </div>
+      </div>
+
+      <Link
+        href={`/${locale}/dashboard`}
+        onClick={onClose}
+        className="flex items-center gap-2 py-2.5 text-xs uppercase tracking-widest text-brand-blue/70 hover:text-brand-green transition-colors"
+      >
+        <LayoutDashboard className="h-3.5 w-3.5" />
+        {t("dashboard")}
+      </Link>
+      <Link
+        href={`/${locale}/dashboard/settings`}
+        onClick={onClose}
+        className="flex items-center gap-2 py-2.5 text-xs uppercase tracking-widest text-brand-blue/70 hover:text-brand-green transition-colors"
+      >
+        <Settings className="h-3.5 w-3.5" />
+        {t("settings")}
+      </Link>
+      {user?.role === "ADMIN" && (
+        <Link
+          href={`/${locale}/admin`}
+          onClick={onClose}
+          className="flex items-center gap-2 py-2.5 text-xs uppercase tracking-widest text-brand-green transition-colors"
+        >
+          <Shield className="h-3.5 w-3.5" />
+          {t("adminPanel")}
+        </Link>
+      )}
+      <button
+        onClick={handleLogout}
+        className="flex items-center gap-2 py-2.5 text-xs uppercase tracking-widest text-destructive w-full mt-1"
+      >
+        <LogOut className="h-3.5 w-3.5" />
+        {t("signOut")}
+      </button>
+    </div>
+  )
+}
