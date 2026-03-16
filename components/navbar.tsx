@@ -174,17 +174,34 @@ export function Navbar({ locale }: NavbarProps) {
     { label: t("contact"), href: "/contact" },
   ]
 
-  useEffect(() => {
-    let lastY = window.scrollY
-    function handleScroll() {
+useEffect(() => {
+  let lastY = window.scrollY
+  let ticking = false
+
+  function handleScroll() {
+    if (ticking) return
+    ticking = true
+
+    requestAnimationFrame(() => {
       const currentY = window.scrollY
+      const delta = currentY - lastY
+
       setScrolled(currentY > 60)
-      setTopBarVisible(currentY < 40 || currentY < lastY)
+
+      if (delta > 8) {
+        setTopBarVisible(false)
+      } else if (delta < -8) {
+        setTopBarVisible(true)
+      }
+
       lastY = currentY
-    }
-    window.addEventListener("scroll", handleScroll, { passive: true })
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
+      ticking = false
+    })
+  }
+
+  window.addEventListener("scroll", handleScroll, { passive: true })
+  return () => window.removeEventListener("scroll", handleScroll)
+}, [])
 
   // Blocca scroll body quando mobile menu è aperto
   useEffect(() => {
