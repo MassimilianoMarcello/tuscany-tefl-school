@@ -66,11 +66,11 @@ export function HeroSection({ data, locale }: HeroSectionProps) {
             </div>
           </AnimateIn>
 
-          <AnimateIn variant="fade" delay={600} duration={800}>
+          {/* <AnimateIn variant="fade" delay={600} duration={800}>
             <p className="absolute bottom-6 left-10 md:left-16 text-xs text-brand-blue/40 uppercase tracking-widest">
               Est. 2006
             </p>
-          </AnimateIn>
+          </AnimateIn> */}
         </div>
 
         {/* ── Colonna immagine (destra) ────────────────────────────── */}
