@@ -14,7 +14,7 @@ export default async function ReviewsPage({ params }: ReviewsPageProps) {
   const [testimonials, t, topPage] = await Promise.all([
     getTestimonials(),
     getTranslations("reviews"),
-    getCommonTopPageByIdentifier("reviews"), // 👈 verifica l'identifier in Sanity
+    getCommonTopPageByIdentifier("reviews"),
   ])
 
   return (
@@ -22,18 +22,24 @@ export default async function ReviewsPage({ params }: ReviewsPageProps) {
       <CoursesHero locale={locale} data={topPage} />
 
       {/* Titolo sezione */}
-      <div className="w-[94%] mx-auto mt-16 mb-10 border border-brand-azure px-4 py-8">
-        <h2 className="text-3xl md:text-4xl font-black text-brand-blue text-center">
+      <div className="max-w-7xl mx-auto px-6 md:px-12 pt-20 pb-12">
+        <p className="text-brand-green uppercase tracking-[0.25em] text-xs font-bold mb-4">
+          {t("eyebrow") ?? "Student Stories"}
+        </p>
+        <h2 className="font-serif-display text-4xl md:text-5xl text-brand-blue leading-[1.1]">
           {t("title")}
         </h2>
+        <div aria-hidden="true" className="w-16 h-[3px] bg-brand-gold mt-6" />
       </div>
 
       {/* Grid recensioni */}
-      <section className="max-w-7xl mx-auto px-4 md:px-8 pb-16">
+      <section className="max-w-7xl mx-auto px-6 md:px-12 pb-20">
         {testimonials.length === 0 ? (
-          <p className="text-center text-gray-400 py-16">{t("noReviews")}</p>
+          <p className="text-center text-brand-blue/40 uppercase tracking-widest text-xs py-16">
+            {t("noReviews")}
+          </p>
         ) : (
-          <div className="flex flex-row flex-wrap gap-6 justify-between">
+          <div className="flex flex-row flex-wrap gap-6">
             {testimonials.map((testimonial) => (
               <ReviewCard key={testimonial._id} testimonial={testimonial} />
             ))}
@@ -41,14 +47,23 @@ export default async function ReviewsPage({ params }: ReviewsPageProps) {
         )}
       </section>
 
-      {/* Form per lasciare una recensione */}
-      <div className="max-w-3xl mx-auto px-4 md:px-8 pb-20">
-        <div className="border border-brand-azure p-8 bg-white rounded-xl shadow-sm">
-          <h3 className="text-2xl font-black text-brand-blue mb-2">{t("formTitle")}</h3>
-          <p className="text-brand-blue/60 mb-6">{t("formSub")}</p>
+      {/* Form */}
+      <section className="bg-brand-blue py-20">
+        <div className="max-w-3xl mx-auto px-6 md:px-12">
+          <p className="text-brand-azure uppercase tracking-[0.25em] text-xs font-bold mb-4">
+            Share your experience
+          </p>
+          <h3 className="font-serif-display text-3xl md:text-4xl text-white leading-[1.1] mb-4">
+            {t("formTitle")}
+          </h3>
+          <div aria-hidden="true" className="w-12 h-[3px] bg-brand-gold mb-8" />
+          <p className="text-white/50 text-sm font-light mb-10">
+            {t("formSub")}
+          </p>
           <ReviewForm locale={locale} />
         </div>
-      </div>
+      </section>
+
     </main>
   )
 }
