@@ -253,6 +253,7 @@
     "fieldState": "Country",
     "fieldTitle": "Review title *",
     "fieldReview": "Your experience *",
-    "fieldRating": "Rating"
+    "fieldRating": "Rating",
+    "eyebrow": "Student Stories"
   }
 }
