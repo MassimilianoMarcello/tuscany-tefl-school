@@ -1,47 +1,88 @@
+// components/home/parallax-section.tsx
 "use client"
 
-// components/home/parallax-section.tsx
-// ✅ ssr: false nel vecchio progetto — rimane client component per background-attachment: fixed
 import Link from "next/link"
 
 interface ParallaxSectionProps {
   locale: string
 }
 
+const labels = {
+  it: {
+    eyebrow: "Firenze · Dal 2006",
+    title: "Studia dove\nl'arte incontra\nla lingua.",
+    cta: "Candidati ora",
+    sub: "Pronto a far parte della tradizione TEFL Tuscany?",
+  },
+  en: {
+    eyebrow: "Florence · Since 2006",
+    title: "Study where\nart meets\nlanguage.",
+    cta: "Apply Now",
+    sub: "Ready to become part of the TEFL Tuscany tradition?",
+  },
+}
+
 export function ParallaxSection({ locale }: ParallaxSectionProps) {
+  const t = locale === "it" ? labels.it : labels.en
+
   return (
     <section
-      className="w-full mt-20 bg-fixed bg-cover bg-left"
-      style={{ backgroundImage: "url('/assets/firienze.webp')" }}
+      className="w-full bg-fixed bg-cover bg-center"
+      style={{ backgroundImage: "url('/assets/firenze.webp')" }}
     >
-      {/* Overlay verde brand semitrasparente */}
-      <div className="bg-[rgba(116,139,103,0.85)] py-24 px-6">
+      <div className="relative bg-brand-blue/80 py-28 md:py-40 px-6">
         <div className="max-w-5xl mx-auto flex flex-col gap-8">
-          <h2 className="text-3xl md:text-5xl font-semibold text-[#e4ece1] leading-snug">
-            Since 2006, our school in Tuscany, located in the heart of Florence
-            and in the Tuscany countryside, has served as a hub for aspiring
-            TEFL teachers.
-          </h2>
-          <p className="text-base md:text-2xl font-light text-white leading-relaxed">
-            Studying in a school located in Tuscany, particularly in Florence,
-            is an unparalleled experience that seamlessly blends academic rigor
-            with cultural immersion. Tuscany, renowned for its breathtaking
-            landscapes, rich history, and artistic heritage, serves as an
-            inspiring backdrop for learning. Florence, the heart of Tuscany, is
-            a city where every cobblestone street whispers tales of the
-            Renaissance, offering students a unique opportunity to walk in the
-            footsteps of history&apos;s greatest minds.
+
+          {/* Eyebrow */}
+          <p className="text-brand-gold uppercase tracking-[0.25em] text-xs font-bold">
+            {t.eyebrow}
           </p>
-          <h3 className="text-lg md:text-xl font-normal text-brand-gold">
-            Ready to become a part of the TEFL Tuscany tradition?
-          </h3>
-          <Link
-            href={`/${locale}/apply`}
-            className="inline-block w-40 text-center uppercase font-bold text-sm tracking-wide bg-white text-[#0741a4] px-4 py-3 rounded-md hover:bg-brand-gold hover:text-white transition-colors"
-          >
-            Apply Now
-          </Link>
+
+          {/* Titolo poster */}
+          <h2 className="font-serif-display text-5xl md:text-7xl lg:text-8xl text-white leading-[1.05] whitespace-pre-line">
+            {t.title}
+          </h2>
+
+          {/* Separatore gold */}
+          <div aria-hidden="true" className="w-16 h-[3px] bg-brand-gold" />
+
+          {/* Sottotitolo */}
+          <p className="text-lg md:text-xl text-white/70 font-light max-w-md leading-relaxed">
+            {t.sub}
+          </p>
+
+          {/* CTA */}
+          <div>
+            <Link
+              href={`/${locale}/apply`}
+              className="inline-flex items-center gap-3 bg-brand-gold text-brand-blue uppercase tracking-widest text-xs font-black px-10 py-5 hover:bg-white transition-colors duration-200"
+            >
+              {t.cta}
+              <span aria-hidden="true">→</span>
+            </Link>
+          </div>
+
         </div>
+
+        {/* Taglio diagonale — dentro la sezione così vede l'immagine parallax */}
+        <svg
+          viewBox="0 0 1440 72"
+          preserveAspectRatio="none"
+          aria-hidden="true"
+          className="absolute bottom-0 left-0 w-full h-10 md:h-14 lg:h-20"
+        >
+          <polygon
+            points="0,72 1440,0 1440,72"
+            fill="var(--color-brand-bg)"
+          />
+          <line
+            x1="0" y1="72"
+            x2="1440" y2="0"
+            stroke="var(--color-brand-gold)"
+            strokeWidth="4"
+          />
+        </svg>
+
       </div>
     </section>
   )
