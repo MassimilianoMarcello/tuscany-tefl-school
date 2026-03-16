@@ -2,6 +2,7 @@
 "use client"
 
 import Link from "next/link"
+import { AnimateIn } from "@/components/ui/animate-in"
 
 interface ParallaxSectionProps {
   locale: string
@@ -33,34 +34,39 @@ export function ParallaxSection({ locale }: ParallaxSectionProps) {
       <div className="relative bg-brand-blue/80 py-28 md:py-40 px-6">
         <div className="max-w-5xl mx-auto flex flex-col gap-8">
 
-          {/* Eyebrow */}
-          <p className="text-brand-gold uppercase tracking-[0.25em] text-xs font-bold">
-            {t.eyebrow}
-          </p>
+          <AnimateIn variant="fadeUp" delay={0} duration={500} threshold={0.15}>
+            <p className="text-brand-gold uppercase tracking-[0.25em] text-xs font-bold">
+              {t.eyebrow}
+            </p>
+          </AnimateIn>
 
-          {/* Titolo poster */}
-          <h2 className="font-serif-display text-5xl md:text-7xl lg:text-8xl text-white leading-[1.05] whitespace-pre-line">
-            {t.title}
-          </h2>
+          <AnimateIn variant="fadeUp" delay={150} duration={700} threshold={0.15}>
+            <h2 className="font-serif-display text-5xl md:text-7xl lg:text-8xl text-white leading-[1.05] whitespace-pre-line">
+              {t.title}
+            </h2>
+          </AnimateIn>
 
-          {/* Separatore gold */}
-          <div aria-hidden="true" className="w-16 h-[3px] bg-brand-gold" />
+          <AnimateIn variant="fade" delay={300} duration={400} threshold={0.15}>
+            <div aria-hidden="true" className="w-16 h-[3px] bg-brand-gold" />
+          </AnimateIn>
 
-          {/* Sottotitolo */}
-          <p className="text-lg md:text-xl text-white/70 font-light max-w-md leading-relaxed">
-            {t.sub}
-          </p>
+          <AnimateIn variant="fadeUp" delay={400} duration={600} threshold={0.15}>
+            <p className="text-lg md:text-xl text-white/70 font-light max-w-md leading-relaxed">
+              {t.sub}
+            </p>
+          </AnimateIn>
 
-          {/* CTA */}
-          <div>
-            <Link
-              href={`/${locale}/apply`}
-              className="inline-flex items-center gap-3 bg-brand-gold text-brand-blue uppercase tracking-widest text-xs font-black px-10 py-5 hover:bg-white transition-colors duration-200"
-            >
-              {t.cta}
-              <span aria-hidden="true">→</span>
-            </Link>
-          </div>
+          <AnimateIn variant="fadeUp" delay={550} duration={600} threshold={0.15}>
+            <div>
+              <Link
+                href={`/${locale}/apply`}
+                className="inline-flex items-center gap-3 bg-brand-gold text-brand-blue uppercase tracking-widest text-xs font-black px-10 py-5 hover:bg-white transition-colors duration-200"
+              >
+                {t.cta}
+                <span aria-hidden="true">→</span>
+              </Link>
+            </div>
+          </AnimateIn>
 
         </div>
 
@@ -71,16 +77,8 @@ export function ParallaxSection({ locale }: ParallaxSectionProps) {
           aria-hidden="true"
           className="absolute bottom-0 left-0 w-full h-10 md:h-14 lg:h-20"
         >
-          <polygon
-            points="0,72 1440,0 1440,72"
-            fill="var(--color-brand-bg)"
-          />
-          <line
-            x1="0" y1="72"
-            x2="1440" y2="0"
-            stroke="var(--color-brand-gold)"
-            strokeWidth="4"
-          />
+          <polygon points="0,72 1440,0 1440,72" fill="var(--color-brand-bg)" />
+          <line x1="0" y1="72" x2="1440" y2="0" stroke="var(--color-brand-gold)" strokeWidth="4" />
         </svg>
 
       </div>

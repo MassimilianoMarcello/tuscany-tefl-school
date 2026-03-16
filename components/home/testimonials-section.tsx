@@ -1,7 +1,7 @@
 // components/home/testimonials-section.tsx
 import Image from "next/image"
-
 import type { Testimonial } from "@/lib/sanity.queries"
+import { AnimateIn } from "@/components/ui/animate-in"
 
 interface TestimonialsSectionProps {
   testimonials: Testimonial[]
@@ -78,35 +78,38 @@ export function TestimonialsSection({
   const [featured, ...rest] = testimonials
 
   return (
-   <section className="w-full bg-brand-blue py-24 lg:py-40">
+    <section className="w-full bg-brand-blue py-24 lg:py-40">
       <div className="max-w-7xl mx-auto px-6 md:px-12">
 
         {/* Eyebrow */}
-        <p className="text-brand-azure uppercase tracking-[0.25em] text-xs font-bold mb-12">
-          {t.eyebrow}
-        </p>
+        <AnimateIn variant="fadeUp" delay={0} duration={500} threshold={0.1}>
+          <p className="text-brand-azure uppercase tracking-[0.25em] text-xs font-bold mb-12">
+            {t.eyebrow}
+          </p>
+        </AnimateIn>
 
         {/* ── Testimonial in evidenza ───────────────────────────── */}
         {featured && (
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-12 mb-16 pb-16 border-b border-white/10">
-
-            {/* Quote gigante */}
             <div className="relative">
-              {/* Virgolette decorative */}
-            <div aria-hidden="true" className="w-16 h-[3px] bg-brand-gold mb-8" />
+              <AnimateIn variant="fadeUp" delay={100} duration={600} threshold={0.1}>
+                <div aria-hidden="true" className="w-16 h-[3px] bg-brand-gold mb-8" />
+              </AnimateIn>
               <blockquote className="relative">
-                <p className="font-serif-display text-2xl md:text-3xl lg:text-4xl text-white leading-[1.3] mb-8">
-                  {featured.review}
-                </p>
-                <StarRating />
-                <footer className="flex items-center gap-4 mt-6">
-                  <Avatar testimonial={featured} />
-                  <AuthorInfo t={featured} />
-                </footer>
+                <AnimateIn variant="fadeUp" delay={200} duration={700} threshold={0.1}>
+                  <p className="font-serif-display text-2xl md:text-3xl lg:text-4xl text-white leading-[1.3] mb-8">
+                    {featured.review}
+                  </p>
+                </AnimateIn>
+                <AnimateIn variant="fadeUp" delay={350} duration={500} threshold={0.1}>
+                  <StarRating />
+                  <footer className="flex items-center gap-4 mt-6">
+                    <Avatar testimonial={featured} />
+                    <AuthorInfo t={featured} />
+                  </footer>
+                </AnimateIn>
               </blockquote>
             </div>
-
-            {/* Accento verticale gold */}
             <div
               aria-hidden="true"
               className="hidden lg:block w-[3px] bg-brand-gold/30 self-stretch"
@@ -117,26 +120,30 @@ export function TestimonialsSection({
         {/* ── Altre testimonial — scroll orizzontale ────────────── */}
         {rest.length > 0 && (
           <>
-            <p className="text-white/30 text-xs uppercase tracking-widest mb-6">
-              {rest.length} {t.more}
-            </p>
-            <div className="flex gap-6 overflow-x-auto pb-4 -mx-6 px-6 md:-mx-12 md:px-12 snap-x snap-mandatory scrollbar-none">
-              {rest.map((item) => (
-                <article
-                  key={item._id}
-                  className="shrink-0 w-72 bg-white/5 border border-white/10 p-6 snap-start"
-                >
-                  <StarRating />
-                  <p className="text-white/70 text-sm font-light leading-relaxed mt-4 mb-6 line-clamp-4">
-                    {item.review}
-                  </p>
-                  <div className="flex items-center gap-3 pt-4 border-t border-white/10">
-                    <Avatar testimonial={item} />
-                    <AuthorInfo t={item} />
-                  </div>
-                </article>
-              ))}
-            </div>
+            <AnimateIn variant="fade" delay={0} duration={500} threshold={0.05}>
+              <p className="text-white/30 text-xs uppercase tracking-widest mb-6">
+                {rest.length} {t.more}
+              </p>
+            </AnimateIn>
+            <AnimateIn variant="fadeUp" delay={100} duration={600} threshold={0.05}>
+              <div className="flex gap-6 overflow-x-auto pb-4 -mx-6 px-6 md:-mx-12 md:px-12 snap-x snap-mandatory scrollbar-none">
+                {rest.map((item) => (
+                  <article
+                    key={item._id}
+                    className="shrink-0 w-72 bg-white/5 border border-white/10 p-6 snap-start"
+                  >
+                    <StarRating />
+                    <p className="text-white/70 text-sm font-light leading-relaxed mt-4 mb-6 line-clamp-4">
+                      {item.review}
+                    </p>
+                    <div className="flex items-center gap-3 pt-4 border-t border-white/10">
+                      <Avatar testimonial={item} />
+                      <AuthorInfo t={item} />
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </AnimateIn>
           </>
         )}
 
