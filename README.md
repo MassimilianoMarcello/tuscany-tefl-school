@@ -60,6 +60,14 @@ Better Auth solves both: session management is handled by the library with expli
 
 **Promise.allSettled on homepage** — if one Sanity query fails, the page still renders with the data that did load rather than throwing a 500.
 
+**SanityImage wrapper** — a custom `components/ui/sanity-image.tsx` wraps Next.js `<Image>` with `unoptimized` and delegates all resizing, format conversion, and quality to the Sanity CDN via `urlFor()`. This avoids double processing (Next.js optimizer + Sanity CDN) on the 90%+ of images that come from Sanity. The wrapper also auto-generates blur placeholders at 20px width.
+
+**Hotspot-aware image queries** — Sanity GROQ queries fetch `photo { asset->, hotspot, crop }` instead of `"photo": photo.asset->url`, preserving the focal point metadata set in Studio. `urlFor()` reads hotspot and crop automatically, so subject-focused images are never incorrectly cropped regardless of container aspect ratio.
+
+**CSS-only scroll animations** — scroll-triggered animations are implemented with a `useInView` hook (IntersectionObserver) and an `AnimateIn` wrapper component using Tailwind transition utilities. No animation library dependency — the bundle stays lean and animations are fully accessible (respects `prefers-reduced-motion` via Tailwind's `transition-*` classes).
+
+**Section dividers as a design system** — `components/ui/section-dividers.tsx` centralizes all SVG transitions between sections. Each divider encodes the relationship between the two sections it connects (diagonal drop, soft wave, gold band pause) using only brand color tokens. Moving sections in the wrapper requires only swapping the divider component, not rewriting CSS.
+
 ---
 
 ## 🔧 Technical Challenges
@@ -75,6 +83,10 @@ Better Auth solves both: session management is handled by the library with expli
 **Next.js root layout conflict with Sanity Studio** — embedding the Studio at `/studio` requires its own `<html>` and `<body>` tags, but the root layout also provides them. Resolved with route groups: `app/(main)/[locale]/` handles the public/authenticated app with its own layout, while `app/studio/` has a dedicated passthrough layout that lets NextStudio manage its own DOM.
 
 **Hydration mismatch with sticky navbar** — the navbar `lang` and `className` attributes set in the locale layout didn't match the root layout's bare `<html>` and `<body>`. Resolved by making `app/layout.tsx` a pure passthrough (`return children`) with no HTML wrapping.
+
+**`overflow-x-hidden` breaking sticky positioning** — applying `overflow-x-hidden` on a parent container creates a new scroll context, which silently prevents `position: sticky` from working on any descendant. Discovered when the courses preview sticky panel stopped scrolling. Resolved by removing the overflow constraint from the page wrapper.
+
+**Sanity image double processing** — the original implementation passed `.width(960).height(1200)` to `urlFor()`, which caused Sanity to crop server-side before delivery. This made `objectPosition` in CSS ineffective because the subject was already cut from the image. Resolved by removing the height constraint from the URL builder and letting CSS handle the crop via `object-fit` and `object-position`.
 
 ---
 
@@ -125,6 +137,16 @@ Better Auth solves both: session management is handled by the library with expli
 - `pageIdentifier` slug for per-page hero images
 - Rich text on course descriptions, FAQ answers, teacher bios
 - Image hotspot + crop + alt text on all image fields
+- Hotspot metadata preserved in GROQ queries (`asset->, hotspot, crop`) for correct focal point rendering
+
+### Design System & UI
+- **Editorial aesthetic** — DM Serif Display for display headings, Geist Sans for body and UI. Typography establishes cultural identity (language school in Tuscany) without external brand assets
+- **Brand token system** — all colors defined as CSS custom properties in `globals.css` via Tailwind v4 `@theme`. Zero hardcoded hex values in components
+- **Section dividers** — SVG-based transitions between sections (diagonal cut, soft wave, gold band) encoded in `components/ui/section-dividers.tsx`. Each divider reflects the relationship between the sections it connects
+- **Alternating light/dark sections** — page wrapper orchestrates a strict chiaro/scuro rhythm: Hero (light) → Feature (dark) → About (light) → Parallax (dark) → Courses (light) → Testimonials (dark)
+- **Scroll-triggered animations** — `useInView` hook with IntersectionObserver + `AnimateIn` wrapper component. Supports `fadeUp`, `fadeDown`, `fadeLeft`, `fadeRight`, `fade`, `scale` variants with configurable delay, duration, and threshold. No animation library dependency
+- **Navbar overhaul** — two-level header: brand-blue top bar with secondary links (collapses on scroll), white main bar with gold bottom border (consistent with divider system). Fullscreen mobile overlay replaces Sheet component
+- **SanityImage wrapper** — `components/ui/sanity-image.tsx` unifies all Sanity image rendering with automatic blur placeholder, `unoptimized` flag to prevent double processing, and hotspot-aware cropping
 
 ---
 
@@ -183,7 +205,11 @@ Studio: http://localhost:3000/studio
 - [x] Authentication (register, login, OAuth, email verification, password reset)
 - [x] Admin panel (stats, user management)
 - [x] Content management panel (courses, testimonials, FAQs via Sanity API)
-- [x] Homepage with all sections
+- [x] Homepage — full editorial restyling (serif display typography, alternating light/dark sections, section dividers, scroll animations)
+- [x] Navbar — brand-blue top bar, gold border, scroll-hide behavior, fullscreen mobile overlay
+- [x] Footer — dark editorial layout consistent with landing system
+- [x] SanityImage wrapper — hotspot-aware, single-pass CDN optimization
+- [x] Scroll-triggered animation system (useInView + AnimateIn, no library dependency)
 - [x] Courses list + detail
 - [x] Teachers list + detail
 - [x] Reviews + submission form + moderation
@@ -193,12 +219,10 @@ Studio: http://localhost:3000/studio
 - [x] Work in Italy page
 - [x] Course Application form (address autocomplete, postcode validation, phone prefix detection)
 - [x] Sanity Studio embedded
-- [x] Footer
 - [x] i18n (Italian + English)
 - [ ] Contact page
 - [ ] Booking system (spots available per course)
 - [ ] Stripe deposit payment
-- [ ] Framer Motion animations
 - [ ] Deploy on Vercel
 - [ ] E2E tests with Playwright on critical paths
 - [ ] Rate limiting on auth and email endpoints (Upstash)
@@ -210,11 +234,12 @@ Studio: http://localhost:3000/studio
 This project solves real business problems for a real client:
 
 - Evaluated two auth solutions and made a documented technical decision based on concrete problems encountered, not preference
-- Debugged non-obvious issues — session cookies in Server Actions, email verification timing — by reading source code and documentation rather than guessing
+- Debugged non-obvious issues — session cookies in Server Actions, email verification timing, `overflow-x-hidden` breaking sticky positioning — by reading source code and documentation rather than guessing
 - Identified a scalability issue early (role management) and addressed it before it became expensive
 - Separated concerns between content (Sanity) and business logic (Prisma) so the client has autonomy without touching code
 - Typed end-to-end — from Zod schema to server action to form, types are inferred not written manually
 - Built a custom admin content panel using Sanity write API, giving non-technical users full control without exposing the raw CMS
+- Rebuilt the frontend design system from scratch — typography, color tokens, animation, section rhythm — prioritizing editorial quality and consistency over speed
 
 ---
 
