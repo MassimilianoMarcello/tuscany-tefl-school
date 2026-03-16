@@ -6,13 +6,18 @@ import { FeatureSection } from "@/components/home/feature-section"
 import { CoursesPreview } from "@/components/home/courses-preview"
 import { TestimonialsSection } from "@/components/home/testimonials-section"
 import { ParallaxSection } from "@/components/home/parallax-section"
+import {
+  DividerHeroToFeature,
+  DividerFeatureToAbout,
+
+  DividerCoursesToTestimonials,
+} from "@/components/ui/section-dividers"
 
 interface HomePageProps {
   params: Promise<{ locale: string }>
 }
 
 export default async function HomePage({ params }: HomePageProps) {
-  // ✅ Promise.allSettled — se una query fallisce le altre si renderizzano comunque
   const [paramsResult, homePageResult, coursesResult, testimonialsResult] =
     await Promise.allSettled([params, getHomePage(), getCourses(), getTestimonials()])
 
@@ -26,15 +31,38 @@ export default async function HomePage({ params }: HomePageProps) {
     testimonialsResult.status === "fulfilled" ? testimonialsResult.value : []
 
   return (
-    <>
+    <main >
+
+      {/* 1 ── chiaro */}
       {homePage && <HeroSection data={homePage} locale={locale} />}
-      <AboutSection locale={locale} />
+
+      <DividerHeroToFeature />
+
+      {/* 2 ── scuro */}
       {homePage && <FeatureSection data={homePage} locale={locale} />}
-      <CoursesPreview courses={courses} locale={locale} />
+
+      <DividerFeatureToAbout />
+
+      {/* 3 ── chiaro */}
+      <AboutSection locale={locale} />
+
+      {/* nessun separatore — la Parallax emerge direttamente */}
+
+      {/* 4 ── scuro */}
       <ParallaxSection locale={locale} />
+
+      {/* <DividerParallaxToCourses /> */}
+
+      {/* 5 ── chiaro */}
+      <CoursesPreview courses={courses} locale={locale} />
+
+      <DividerCoursesToTestimonials />
+
+      {/* 6 ── scuro */}
       {testimonials.length > 0 && (
-        <TestimonialsSection testimonials={testimonials} />
+        <TestimonialsSection testimonials={testimonials} locale={locale} />
       )}
-    </>
+
+    </main>
   )
 }
