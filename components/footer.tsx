@@ -53,38 +53,40 @@ export function Footer() {
         
         {/* Col 1 — Brand / Contact */}
         <div className="flex flex-col gap-6">
-          <Image
-            src="/assets/Tuscany_logo6.webp"
-            alt="TEFL Tuscany logo"
-            width={160}
-            height={48}
-            className="object-contain brightness-0 invert"
-            style={{ width: "auto" }}
-          />
+   <div style={{ backgroundColor: '#fefefe', padding: '10px' }}>
+  <Image
+    src="/assets/Tuscany_logo6.webp"
+    alt="TEFL Tuscany logo"
+    width={160}
+    height={48}
+    className="object-contain "
+    style={{ width: "auto" }}
+  />
+</div>
 
           <address className="not-italic flex flex-col gap-1">
             <p className="text-white font-bold text-sm">Centro Studi Mugello srl</p>
-            <p className="text-white/50 text-xs uppercase tracking-wide">Via degli Argini, 8/14</p>
-            <p className="text-white/50 text-xs uppercase tracking-wide">Borgo San Lorenzo (FI) Italy</p>
-            <p className="text-white/30 text-xs uppercase tracking-wide mt-1">P.IVA: 04603520489</p>
+            <p className="text-white/80 text-xs">Via degli Argini, 8/14</p>
+            <p className="text-white/80 text-xs">Borgo San Lorenzo (FI) Italy</p>
+            <p className="text-white/50 text-xs mt-1">P.IVA: 04603520489</p>
           </address>
 
           <div className="flex flex-col gap-2">
             <a
               href="tel:+390558495765"
-              className="flex items-center gap-2 text-white/60 hover:text-brand-gold transition-colors text-sm"
+              className="flex items-center gap-2 text-white/80 hover:text-brand-gold transition-colors text-sm"
             >
               <Phone className="h-3.5 w-3.5 shrink-0" />
               +39 055 849 5765
             </a>
             <a
               href="tel:+18437551560"
-              className="flex items-center gap-2 text-white/60 hover:text-brand-gold transition-colors text-sm"
+              className="flex items-center gap-2 text-white/80 hover:text-brand-gold transition-colors text-sm"
             >
               <Phone className="h-3.5 w-3.5 shrink-0" />
               +1 (843) 755-1560
             </a>
-            <p className="text-white/30 text-xs uppercase tracking-widest mt-1">
+            <p className="text-white/40 text-xs uppercase tracking-widest mt-1">
               Mon–Fri 9am to 5pm
             </p>
           </div>
@@ -96,7 +98,7 @@ export function Footer() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Facebook"
-              className="h-9 w-9 border border-white/10 flex items-center justify-center text-white/40 hover:border-brand-gold hover:text-brand-gold transition-colors"
+              className="h-9 w-9 border border-white/20 flex items-center justify-center text-white/60 hover:border-brand-gold hover:text-brand-gold transition-colors"
             >
               <Facebook className="h-4 w-4" />
             </a>
@@ -105,7 +107,7 @@ export function Footer() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="YouTube"
-              className="h-9 w-9 border border-white/10 flex items-center justify-center text-white/40 hover:border-brand-gold hover:text-brand-gold transition-colors"
+              className="h-9 w-9 border border-white/20 flex items-center justify-center text-white/60 hover:border-brand-gold hover:text-brand-gold transition-colors"
             >
               <Youtube className="h-4 w-4" />
             </a>
@@ -114,7 +116,7 @@ export function Footer() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="WhatsApp"
-              className="h-9 w-9 border border-white/10 flex items-center justify-center text-white/40 hover:border-brand-gold hover:text-brand-gold transition-colors"
+              className="h-9 w-9 border border-white/20 flex items-center justify-center text-white/60 hover:border-brand-gold hover:text-brand-gold transition-colors"
             >
               <MessageCircle className="h-4 w-4" />
             </a>
@@ -131,7 +133,7 @@ export function Footer() {
               <li key={link.href}>
                 <Link
                   href={link.href}
-                  className="text-white/50 hover:text-brand-gold text-xs uppercase tracking-widest font-bold transition-colors"
+                  className="text-white/60 hover:text-brand-gold text-xs uppercase tracking-widest font-bold transition-colors"
                 >
                   {link.label}
                 </Link>
@@ -150,7 +152,7 @@ export function Footer() {
               <li key={link.href}>
                 <Link
                   href={link.href}
-                  className="text-white/50 hover:text-brand-gold text-xs uppercase tracking-widest font-bold transition-colors"
+                  className="text-white/60 hover:text-brand-gold text-xs uppercase tracking-widest font-bold transition-colors"
                 >
                   {link.label}
                 </Link>
@@ -167,7 +169,7 @@ export function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-white/30 hover:text-white/60 text-xs uppercase tracking-widest transition-colors"
+                    className="text-white/40 hover:text-white/70 text-xs uppercase tracking-widest transition-colors"
                   >
                     {link.label}
                   </Link>
@@ -182,7 +184,7 @@ export function Footer() {
           <p className="text-[9px] uppercase tracking-[0.3em] font-black text-brand-gold border-b border-brand-gold/30 pb-3">
             {t("newsletter")}
           </p>
-          <p className="text-white/50 text-sm font-light leading-relaxed">
+          <p className="text-white/60 text-sm font-light leading-relaxed">
             {t("newsletterSub")}
           </p>
 
@@ -198,7 +200,7 @@ export function Footer() {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder={t("emailPlaceholder")}
                 required
-                className="w-full px-4 py-3 bg-white/5 text-white placeholder-white/30 border border-white/10 focus:outline-none focus:border-brand-gold text-sm transition-colors"
+                className="w-full px-4 py-3 bg-white/5 text-white placeholder-white/30 border border-white/20 focus:outline-none focus:border-brand-gold text-sm transition-colors"
               />
               <button
                 type="submit"
@@ -209,11 +211,12 @@ export function Footer() {
             </form>
           )}
 
+          {/* WhatsApp CTA */}
           <a
             href="https://wa.me/393928537513"
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-2 flex items-center gap-3 border border-white/10 text-white/60 hover:border-brand-gold hover:text-brand-gold font-bold px-4 py-3 transition-colors text-xs uppercase tracking-widest"
+            className="mt-2 flex items-center gap-3 bg-[#25D366] text-white font-black px-4 py-3 hover:bg-[#1ebd57] transition-colors text-xs uppercase tracking-widest"
           >
             <MessageCircle className="h-4 w-4 shrink-0" />
             {t("whatsapp")}
@@ -222,8 +225,18 @@ export function Footer() {
       </div>
 
       {/* Bottom bar */}
-      <div className="border-t border-white/5 py-5 px-6 text-center text-white/20 text-[10px] uppercase tracking-widest">
-        © {new Date().getFullYear()} TEFL Tuscany — Centro Studi Mugello srl. All rights reserved.
+      <div className="border-t border-white/5 py-5 px-6 flex flex-col md:flex-row items-center justify-between gap-2">
+        <p className="text-white/20 text-[10px] uppercase tracking-widest text-center md:text-left">
+          © {new Date().getFullYear()} TEFL Tuscany — Centro Studi Mugello srl. All rights reserved.
+        </p>
+        <a
+          href="https://massdev.dev"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-white/20 hover:text-brand-gold text-[10px] uppercase tracking-widest transition-colors"
+        >
+          Designed & built by massdev.dev
+        </a>
       </div>
     </footer>
   )
