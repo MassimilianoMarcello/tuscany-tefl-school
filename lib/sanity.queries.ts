@@ -2,44 +2,44 @@
 // ✅ Query GROQ centralizzate
 //    Filtra published == true per courses, testimonials, faqs
 
-import { groq } from "next-sanity"
-import { client } from "./sanity.client"
-import type { PortableTextBlock } from "@portabletext/react"
+import { groq } from "next-sanity";
+import { client } from "./sanity.client";
+import type { PortableTextBlock } from "@portabletext/react";
 
 // ─── Tipi ────────────────────────────────────────────────────────────────────
 
 export type CommonTop = {
-  _id: string
-  title: string
-  subtitle?: string
-  backgroundImage?: string  // URL diretta risolta in GROQ
-}
+  _id: string;
+  title: string;
+  subtitle?: string;
+  backgroundImage?: string; // URL diretta risolta in GROQ
+};
 
 export type PageSection = {
-  _key: string
-  order?: number
-  title: string
-  subtitle?: string
-  text?: string
+  _key: string;
+  order?: number;
+  title: string;
+  subtitle?: string;
+  text?: string;
   image?: {
-    asset: { url: string }
-    crop?: object
-    hotspot?: object
-  }
-  content?: PortableTextBlock[]
-}
+    asset: { url: string };
+    crop?: object;
+    hotspot?: object;
+  };
+  content?: PortableTextBlock[];
+};
 
 export type PageType = {
-  _id: string
-  mainTitle: string
-  pageType?: { current: string }
+  _id: string;
+  mainTitle: string;
+  pageType?: { current: string };
   mainImage?: {
-    asset: { url: string }
-    crop?: object
-    hotspot?: object
-  }
-  sections: PageSection[]
-}
+    asset: { url: string };
+    crop?: object;
+    hotspot?: object;
+  };
+  sections: PageSection[];
+};
 
 export type Course = {
   _id: string
@@ -53,68 +53,85 @@ export type Course = {
   description: PortableTextBlock[] | string
   hours: number
   level: string
-  photo: string
+  photo: {
+    asset: {
+      _id: string
+      url: string
+    }
+    hotspot?: {
+      x: number
+      y: number
+      width: number
+      height: number
+    }
+    crop?: {
+      top: number
+      bottom: number
+      left: number
+      right: number
+    }
+  }
   featured?: boolean
   maxStudents?: number
 }
 
 export type Testimonial = {
-  _id: string
-  name: string
-  city: string
-  state: string
-  review: string
-  title: string
-  rating?: number
-  courseAttended?: { name: string; slug: string }
+  _id: string;
+  name: string;
+  city: string;
+  state: string;
+  review: string;
+  title: string;
+  rating?: number;
+  courseAttended?: { name: string; slug: string };
   image: {
-    asset: { _id: string; url: string }
-    crop?: object
-    hotspot?: object
-    alt?: string
-  }
-}
+    asset: { _id: string; url: string };
+    crop?: object;
+    hotspot?: object;
+    alt?: string;
+  };
+};
 
 export type Teacher = {
-  _id: string
-  name: string
-  role: string
-  idPhoto: string
-  infoParagraph: string
-  slug: string
-}
+  _id: string;
+  name: string;
+  role: string;
+  idPhoto: string;
+  infoParagraph: string;
+  slug: string;
+};
 
 export type Faq = {
-  _id: string
-  question: string
-  answer: PortableTextBlock[] | string
-  category: string
-  _createdAt: string
-}
+  _id: string;
+  question: string;
+  answer: PortableTextBlock[] | string;
+  category: string;
+  _createdAt: string;
+};
 
 export type SlideItem = {
-  _id: string
-  title: string
-  subtitle: string
-  text: string
-  linkText: string
-  slug: string
-  image: string
-  alt: string
-}
+  _id: string;
+  title: string;
+  subtitle: string;
+  text: string;
+  linkText: string;
+  slug: string;
+  image: string;
+  alt: string;
+};
 
 export type HomePage = {
-  _id: string
-  mainTitle: string
-  mainText: PortableTextBlock[] | string
-  bannerImage: string
+  _id: string;
+  mainTitle: string;
+  mainText: PortableTextBlock[] | string;
+  bannerImage: string;
   components: {
-    _key: string
-    title: string
-    text: string
-    image: string
-  }[]
-}
+    _key: string;
+    title: string;
+    text: string;
+    image: string;
+  }[];
+};
 
 // ─── CommonTopPage queries ────────────────────────────────────────────────────
 
@@ -123,7 +140,7 @@ export type HomePage = {
  * Usage: getCommonTopPageByIdentifier("work-in-italy")
  */
 export async function getCommonTopPageByIdentifier(
-  identifier: string
+  identifier: string,
 ): Promise<CommonTop | null> {
   return client.fetch(
     groq`*[_type == "commonTopPage" && pageIdentifier.current == $identifier][0]{
@@ -132,8 +149,8 @@ export async function getCommonTopPageByIdentifier(
       subtitle,
       "backgroundImage": backgroundImage.asset->url
     }`,
-    { identifier }
-  )
+    { identifier },
+  );
 }
 
 /**
@@ -146,8 +163,8 @@ export async function getCommonTopPages(): Promise<CommonTop[]> {
       title,
       subtitle,
       "backgroundImage": backgroundImage.asset->url
-    }`
-  )
+    }`,
+  );
 }
 
 // ─── Page queries ─────────────────────────────────────────────────────────────
@@ -166,7 +183,7 @@ const PAGE_SECTIONS_FRAGMENT = groq`
     },
     content[]
   }
-`
+`;
 
 /**
  * Fetch a page by Sanity _id.
@@ -185,8 +202,8 @@ export async function getPages(id: string): Promise<PageType> {
       },
       ${PAGE_SECTIONS_FRAGMENT}
     }`,
-    { id }
-  )
+    { id },
+  );
 }
 
 /**
@@ -204,8 +221,8 @@ export async function getPageByIndex(index: number): Promise<PageType> {
         hotspot
       },
       ${PAGE_SECTIONS_FRAGMENT}
-    }`
-  )
+    }`,
+  );
 }
 
 // ─── Course queries ───────────────────────────────────────────────────────────
@@ -226,9 +243,13 @@ export async function getCourses(): Promise<Course[]> {
       level,
       featured,
       maxStudents,
-      "photo": photo.asset->url
-    }`
-  )
+      photo{
+  asset->,
+  hotspot,
+  crop
+}
+    }`,
+  );
 }
 
 export async function getFeaturedCourses(): Promise<Course[]> {
@@ -245,9 +266,13 @@ export async function getFeaturedCourses(): Promise<Course[]> {
       description,
       hours,
       level,
-      "photo": photo.asset->url
-    }`
-  )
+      photo{
+  asset->,
+  hotspot,
+  crop
+}
+    }`,
+  );
 }
 
 export async function getCourse(slug: string): Promise<Course> {
@@ -266,10 +291,14 @@ export async function getCourse(slug: string): Promise<Course> {
       level,
       featured,
       maxStudents,
-      "photo": photo.asset->url
+      photo{
+  asset->,
+  hotspot,
+  crop
+}
     }`,
-    { slug }
-  )
+    { slug },
+  );
 }
 
 // ─── Other queries ────────────────────────────────────────────────────────────
@@ -291,8 +320,8 @@ export async function getTestimonials(): Promise<Testimonial[]> {
         hotspot,
         alt
       }
-    }`
-  )
+    }`,
+  );
 }
 
 export async function getTeachers(): Promise<Teacher[]> {
@@ -304,8 +333,8 @@ export async function getTeachers(): Promise<Teacher[]> {
       "idPhoto": idPhoto.asset->url,
       infoParagraph,
       "slug": slug.current
-    }`
-  )
+    }`,
+  );
 }
 
 export async function getFaqs(): Promise<Faq[]> {
@@ -316,8 +345,8 @@ export async function getFaqs(): Promise<Faq[]> {
       answer,
       category,
       _createdAt
-    }`
-  )
+    }`,
+  );
 }
 
 export async function getSlideItems(): Promise<SlideItem[]> {
@@ -331,8 +360,8 @@ export async function getSlideItems(): Promise<SlideItem[]> {
       "slug": slug.current,
       "image": image.asset->url,
       alt
-    }`
-  )
+    }`,
+  );
 }
 
 export async function getHomePage(): Promise<HomePage | null> {
@@ -348,8 +377,8 @@ export async function getHomePage(): Promise<HomePage | null> {
         text,
         "image": image.asset->url
       }
-    }`
-  )
+    }`,
+  );
 }
 
 /**
@@ -358,7 +387,7 @@ export async function getHomePage(): Promise<HomePage | null> {
  * for now maxStudents is returned as the ceiling.
  */
 export async function getUpcomingCourses(): Promise<Course[]> {
-  const today = new Date().toISOString().split("T")[0] // "YYYY-MM-DD"
+  const today = new Date().toISOString().split("T")[0]; // "YYYY-MM-DD"
   return client.fetch(
     groq`*[
       _type == "course" &&
@@ -377,7 +406,6 @@ export async function getUpcomingCourses(): Promise<Course[]> {
       level,
       maxStudents
     }`,
-    { today }
-  )
+    { today },
+  );
 }
- 
