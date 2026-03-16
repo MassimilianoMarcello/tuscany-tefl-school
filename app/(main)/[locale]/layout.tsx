@@ -1,9 +1,6 @@
 // app/[locale]/layout.tsx
-// ✅ Root layout — avvolge tutta l'app con NextIntlClientProvider
-//    Questo layout sostituisce app/layout.tsx come punto di ingresso principale
-
 import type { Metadata } from "next"
-import { Geist, Geist_Mono } from "next/font/google"
+import { Geist, Geist_Mono, DM_Serif_Display } from "next/font/google"
 import { NextIntlClientProvider } from "next-intl"
 import { getMessages } from "next-intl/server"
 import { notFound } from "next/navigation"
@@ -22,6 +19,14 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 })
 
+const dmSerifDisplay = DM_Serif_Display({
+  variable: "--font-dm-serif",
+  weight: "400",
+  style: ["normal", "italic"],
+  subsets: ["latin"],
+  display: "swap",
+})
+
 export const metadata: Metadata = {
   title: "Tuscany TEFL School",
   description: "Get your TEFL certification in Tuscany",
@@ -35,22 +40,20 @@ interface RootLayoutProps {
 export default async function RootLayout({ children, params }: RootLayoutProps) {
   const { locale } = await params
 
-  // Valida la locale — se non è supportata mostra 404
   if (!routing.locales.includes(locale as "it" | "en")) {
     notFound()
   }
 
-  // Carica i messaggi per la locale corrente
   const messages = await getMessages()
 
   return (
     <html lang={locale}>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} ${dmSerifDisplay.variable} antialiased`}
+      >
         <NextIntlClientProvider messages={messages}>
-           <Navbar locale={locale} />
-        
+          <Navbar locale={locale} />
           {children}
-   
           <Footer />
         </NextIntlClientProvider>
       </body>
