@@ -1,15 +1,17 @@
-"use client"
 // components/reviews/review-form.tsx
-// ✅ Salva su Sanity come bozza con published: false — l'admin approva dalla dashboard
+"use client"
+
 import { useState } from "react"
 import { useTranslations } from "next-intl"
-import { Button } from "@/components/ui/button"
 
 interface ReviewFormProps {
   locale: string
 }
 
-export function ReviewForm({ locale }: ReviewFormProps) {
+const inputClass =
+  "w-full px-4 py-3 bg-white border border-brand-blue/20 text-brand-blue placeholder-brand-blue/30 focus:outline-none focus:border-brand-gold text-sm transition-colors"
+
+export function ReviewForm({ locale: _locale }: ReviewFormProps) {
   const t = useTranslations("reviews")
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
@@ -24,7 +26,9 @@ export function ReviewForm({ locale }: ReviewFormProps) {
     rating: 5,
   })
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }))
   }
 
@@ -32,14 +36,12 @@ export function ReviewForm({ locale }: ReviewFormProps) {
     e.preventDefault()
     setLoading(true)
     setError("")
-
     try {
       const res = await fetch("/api/reviews/submit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       })
-
       if (!res.ok) throw new Error("Submission failed")
       setSuccess(true)
     } catch {
@@ -51,16 +53,19 @@ export function ReviewForm({ locale }: ReviewFormProps) {
 
   if (success) {
     return (
-      <div className="text-center py-8">
-        <p className="text-2xl font-black text-brand-green mb-2">🎉 {t("formSuccess")}</p>
-        <p className="text-brand-blue/60">{t("formSuccessSub")}</p>
+      <div className="text-center py-12">
+        <div aria-hidden="true" className="w-12 h-[3px] bg-brand-gold mx-auto mb-6" />
+        <p className="font-serif-display text-2xl text-brand-green mb-2">
+          {t("formSuccess")}
+        </p>
+        <p className="text-brand-blue/50 text-sm">{t("formSuccessSub")}</p>
       </div>
     )
   }
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-      {/* Nome */}
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <input
           name="name"
@@ -68,14 +73,14 @@ export function ReviewForm({ locale }: ReviewFormProps) {
           onChange={handleChange}
           placeholder={t("fieldName")}
           required
-          className="px-4 py-3 rounded-lg border border-gray-200 text-brand-blue focus:outline-none focus:border-brand-azure text-sm"
+          className={inputClass}
         />
         <input
           name="city"
           value={form.city}
           onChange={handleChange}
           placeholder={t("fieldCity")}
-          className="px-4 py-3 rounded-lg border border-gray-200 text-brand-blue focus:outline-none focus:border-brand-azure text-sm"
+          className={inputClass}
         />
       </div>
 
@@ -84,7 +89,7 @@ export function ReviewForm({ locale }: ReviewFormProps) {
         value={form.state}
         onChange={handleChange}
         placeholder={t("fieldState")}
-        className="px-4 py-3 rounded-lg border border-gray-200 text-brand-blue focus:outline-none focus:border-brand-azure text-sm"
+        className={inputClass}
       />
 
       <input
@@ -93,7 +98,7 @@ export function ReviewForm({ locale }: ReviewFormProps) {
         onChange={handleChange}
         placeholder={t("fieldTitle")}
         required
-        className="px-4 py-3 rounded-lg border border-gray-200 text-brand-blue focus:outline-none focus:border-brand-azure text-sm"
+        className={inputClass}
       />
 
       <textarea
@@ -102,36 +107,50 @@ export function ReviewForm({ locale }: ReviewFormProps) {
         onChange={handleChange}
         placeholder={t("fieldReview")}
         required
-        rows={4}
-        className="px-4 py-3 rounded-lg border border-gray-200 text-brand-blue focus:outline-none focus:border-brand-azure text-sm resize-none"
+        rows={5}
+        className={`${inputClass} resize-none`}
       />
 
-      {/* Rating */}
-      <div className="flex items-center gap-3">
-        <span className="text-sm text-brand-blue font-semibold">{t("fieldRating")}:</span>
-        <select
-          name="rating"
-          value={form.rating}
-          onChange={handleChange}
-          className="px-3 py-2 rounded-lg border border-gray-200 text-brand-blue focus:outline-none focus:border-brand-azure text-sm"
-        >
-          {[5, 4, 3, 2, 1].map((n) => (
-            <option key={n} value={n}>
-              {"⭐".repeat(n)} ({n})
-            </option>
+      {/* Rating — stelle SVG invece di emoji */}
+      <div className="flex items-center gap-4">
+        <span className="text-xs uppercase tracking-widest font-bold text-brand-blue/50">
+          {t("fieldRating")}
+        </span>
+        <div className="flex gap-2">
+          {[1, 2, 3, 4, 5].map((n) => (
+            <button
+              key={n}
+              type="button"
+              onClick={() => setForm((prev) => ({ ...prev, rating: n }))}
+              aria-label={`${n} stelle`}
+              className="focus:outline-none"
+            >
+              <svg
+                className={`w-6 h-6 transition-colors ${
+                  n <= form.rating ? "text-brand-gold" : "text-brand-blue/20"
+                }`}
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+              </svg>
+            </button>
           ))}
-        </select>
+        </div>
       </div>
 
-      {error && <p className="text-red-500 text-sm">{error}</p>}
+      {error && (
+        <p className="text-red-500 text-xs uppercase tracking-wide">{error}</p>
+      )}
 
-      <Button
+      <button
         type="submit"
         disabled={loading}
-        className="bg-brand-blue hover:bg-brand-blue-dark text-white uppercase font-black tracking-wide py-4"
+        className="w-full py-4 bg-brand-blue hover:bg-brand-blue-dark text-white uppercase tracking-widest text-xs font-black transition-colors disabled:opacity-50"
       >
         {loading ? t("formSubmitting") : t("formSubmit")}
-      </Button>
+      </button>
+
     </form>
   )
 }
