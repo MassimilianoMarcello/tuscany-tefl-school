@@ -1,10 +1,9 @@
 // components/home/feature-section.tsx
-import Image from "next/image"
 import Link from "next/link"
 import { PortableText, type PortableTextBlock } from "@portabletext/react"
-import { urlFor } from "@/lib/sanity.client"
 import type { HomePage } from "@/lib/sanity.queries"
 import { Button } from "@/components/ui/button"
+import { SanityImage } from "@/components/ui/sanity-image"
 
 interface FeatureSectionProps {
   data: HomePage
@@ -16,50 +15,70 @@ export function FeatureSection({ data, locale }: FeatureSectionProps) {
   if (!feature) return null
 
   return (
-    <section className="relative w-full grid grid-cols-8 grid-rows-4 overflow-hidden bg-white">
-      <span className="col-span-2 row-span-3 bg-brand-azure z-10 hidden lg:block" />
-      <span className="col-start-7 col-span-2 row-span-1 bg-brand-gold z-10" />
-      <span className="col-start-7 col-span-2 row-span-3 bg-brand-azure z-10 hidden lg:block" />
+    <section className="w-full  grid grid-cols-1 lg:grid-cols-2 min-h-150 ">
 
-      {feature.image && (
-        <div className="absolute inset-0 z-20">
-          <Image
-            src={urlFor(feature.image).width(1440).height(900).url()}
+      {/* ── Colonna immagine (sinistra) ───────────────────────── */}
+     <div className="relative h-72  lg:h-auto overflow-hidden bg-brand-blue ">
+        {feature.image ? (
+          <SanityImage
+            asset={feature.image}
             alt={feature.title ?? "Feature"}
-            width={1440}
-            height={900}
-            className="w-full h-full object-cover"
-            priority
+            fill
+            className="object-cover py-20 object-[-25%_center] lg:object-[-11%_center]"
+            sizes="(max-width: 1024px) 100vw, 50vw"
           />
-        </div>
-      )}
+        ) : (
+          <div className="w-full h-full bg-brand-azure/20" />
+        )}
+      </div>
 
-      <div className="absolute top-8 right-4 md:right-16 z-30 max-w-sm md:max-w-lg">
-        <h2 className="text-3xl md:text-5xl lg:text-6xl font-black text-brand-blue bg-brand-bg px-4 py-3 leading-tight">
+      {/* ── Colonna testo (destra) ────────────────────────────── */}
+<div className="relative flex flex-col justify-center bg-brand-blue px-10 md:px-16 lg:px-20 py-24 lg:py-40">
+
+        {/* Accento verticale gold — speculare all'Hero */}
+        <span
+          aria-hidden="true"
+          className="absolute right-0 top-0 bottom-0 w-1.5 bg-brand-gold"
+        />
+
+        {/* Eyebrow */}
+        <p className="text-brand-azure uppercase tracking-[0.25em] text-xs font-bold mb-5">
+          Our Approach
+        </p>
+
+        {/* Titolo */}
+        <h2 className="font-serif-display text-4xl md:text-5xl xl:text-6xl text-white leading-[1.1] mb-6">
           {feature.title}
         </h2>
-      </div>
 
-      <div className="absolute bottom-16 left-4 md:left-16 z-30 max-w-sm md:max-w-lg border-b-[1rem] border-brand-gold pb-8">
-        <div className="text-base md:text-lg text-brand-blue bg-brand-bg px-4 py-3 font-light leading-relaxed">
-          {Array.isArray(feature.text) ? (
-            <PortableText value={feature.text as PortableTextBlock[]} />
-          ) : (
-            <p>{feature.text as string}</p>
-          )}
+        {/* Separatore gold */}
+        <div
+          aria-hidden="true"
+          className="w-16 h-[3px] bg-brand-gold mb-8"
+        />
+
+        {/* Body text */}
+        {feature.text && (
+          <div className="text-base md:text-lg text-white/70 font-light leading-relaxed mb-10 max-w-md [&_p]:mb-3">
+            {Array.isArray(feature.text) ? (
+              <PortableText value={feature.text as PortableTextBlock[]} />
+            ) : (
+              <p>{feature.text as string}</p>
+            )}
+          </div>
+        )}
+
+        {/* CTA */}
+        <div>
+          <Button
+            asChild
+            className="bg-transparent border-2 border-brand-gold text-brand-gold hover:bg-brand-gold hover:text-brand-blue uppercase tracking-widest text-xs font-bold px-8 py-5 rounded-none transition-colors duration-200"
+          >
+            <Link href={`/${locale}/contact`}>Book a Call</Link>
+          </Button>
         </div>
       </div>
 
-      <div className="absolute bottom-4 left-4 md:left-8 z-30">
-        <Button
-          asChild
-          className="bg-white border-4 border-brand-azure text-brand-blue hover:bg-brand-azure uppercase font-bold tracking-wide rounded-3xl px-6 py-4"
-        >
-          <Link href={`/${locale}/contact`}>Book a Call</Link>
-        </Button>
-      </div>
-
-      <div className="col-span-8 row-span-4 min-h-160 md:min-h-240" />
     </section>
   )
 }
