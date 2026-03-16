@@ -56,8 +56,18 @@
   --color-brand-green-dark:  #3d7455;
   --color-brand-gold:        #ffd704;
   --color-brand-bg:          #eceff0;
+
   --color-brand-text:        #151e30;
-}
+
+  /* === TIPOGRAFIA DISPLAY === (nuove aggiunte) */
+  --font-serif-display:      var(--font-dm-serif), "Georgia", serif;
+
+  /* === SPAZIATURA SEZIONI === (convenzione condivisa) */
+--section-py:     6rem;    /* era 5rem */
+  --section-py-lg:  10rem;   /* era 8rem */
+}     
+
+
 
 :root {
   --radius: 0.625rem;
