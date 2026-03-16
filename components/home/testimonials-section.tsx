@@ -1,58 +1,145 @@
 // components/home/testimonials-section.tsx
 import Image from "next/image"
-import { urlFor } from "@/lib/sanity.client"
+
 import type { Testimonial } from "@/lib/sanity.queries"
-import { Quote } from "lucide-react"
 
 interface TestimonialsSectionProps {
   testimonials: Testimonial[]
+  locale?: string
 }
 
-export function TestimonialsSection({ testimonials }: TestimonialsSectionProps) {
-  return (
-    <section className="w-full bg-brand-bg py-16 border-t-4 border-brand-blue">
-      <div className="max-w-7xl mx-auto px-4 md:px-8">
-        <h2 className="text-3xl md:text-4xl font-black text-brand-blue uppercase tracking-wide mb-12 text-center">
-          What our students say
-        </h2>
+const labels = {
+  it: {
+    eyebrow: "Cosa dicono i nostri studenti",
+    more: "altre storie",
+  },
+  en: {
+    eyebrow: "What our students say",
+    more: "more stories",
+  },
+}
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {testimonials.map((t) => (
-            <div
-              key={t._id}
-              className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex flex-col gap-4"
-            >
-              <Quote className="h-6 w-6 text-brand-azure" />
-              <p className="text-brand-blue text-base leading-relaxed flex-1">
-                {t.review}
-              </p>
-              <div className="flex items-center gap-3 pt-4 border-t border-gray-100">
-                {t.image?.asset?.url ? (
-                  <Image
-                    src={t.image.asset.url}
-                    alt={t.name}
-                    width={48}
-                    height={48}
-                    className="rounded-full h-12 w-12 object-cover"
-                  />
-                ) : (
-                  <div className="h-12 w-12 rounded-full bg-brand-blue flex items-center justify-center text-white font-bold text-lg">
-                    {t.name[0]}
-                  </div>
-                )}
-                <div>
-                  <p className="font-bold text-brand-blue text-sm">{t.name}</p>
-                  <p className="text-xs text-gray-500">
-                    {t.city}{t.state ? `, ${t.state}` : ""}
-                  </p>
-                  {t.title && (
-                    <p className="text-xs text-brand-green font-medium">{t.title}</p>
-                  )}
-                </div>
-              </div>
+function StarRating({ count = 5 }: { count?: number }) {
+  return (
+    <div className="flex gap-1" aria-label={`${count} stelle su 5`}>
+      {Array.from({ length: 5 }).map((_, i) => (
+        <svg
+          key={i}
+          aria-hidden="true"
+          className={`w-4 h-4 ${i < count ? "text-brand-gold" : "text-white/20"}`}
+          fill="currentColor"
+          viewBox="0 0 20 20"
+        >
+          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+        </svg>
+      ))}
+    </div>
+  )
+}
+
+function Avatar({ testimonial }: { testimonial: Testimonial }) {
+  if (testimonial.image?.asset?.url) {
+    return (
+      <Image
+        src={testimonial.image.asset.url}
+        alt={testimonial.name}
+        width={48}
+        height={48}
+        className="rounded-full h-12 w-12 object-cover shrink-0"
+      />
+    )
+  }
+  return (
+    <div className="h-12 w-12 rounded-full bg-brand-azure/20 border border-brand-azure/30 flex items-center justify-center text-brand-azure font-bold text-lg shrink-0">
+      {testimonial.name[0]}
+    </div>
+  )
+}
+
+function AuthorInfo({ t }: { t: Testimonial }) {
+  return (
+    <div>
+      <p className="font-bold text-white text-sm">{t.name}</p>
+      <p className="text-xs text-white/40">
+        {t.city}{t.state ? `, ${t.state}` : ""}
+      </p>
+      {t.title && (
+        <p className="text-xs text-brand-azure mt-0.5">{t.title}</p>
+      )}
+    </div>
+  )
+}
+
+export function TestimonialsSection({
+  testimonials,
+  locale = "en",
+}: TestimonialsSectionProps) {
+  const t = locale === "it" ? labels.it : labels.en
+  const [featured, ...rest] = testimonials
+
+  return (
+   <section className="w-full bg-brand-blue py-24 lg:py-40">
+      <div className="max-w-7xl mx-auto px-6 md:px-12">
+
+        {/* Eyebrow */}
+        <p className="text-brand-azure uppercase tracking-[0.25em] text-xs font-bold mb-12">
+          {t.eyebrow}
+        </p>
+
+        {/* ── Testimonial in evidenza ───────────────────────────── */}
+        {featured && (
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-12 mb-16 pb-16 border-b border-white/10">
+
+            {/* Quote gigante */}
+            <div className="relative">
+              {/* Virgolette decorative */}
+            <div aria-hidden="true" className="w-16 h-[3px] bg-brand-gold mb-8" />
+              <blockquote className="relative">
+                <p className="font-serif-display text-2xl md:text-3xl lg:text-4xl text-white leading-[1.3] mb-8">
+                  {featured.review}
+                </p>
+                <StarRating />
+                <footer className="flex items-center gap-4 mt-6">
+                  <Avatar testimonial={featured} />
+                  <AuthorInfo t={featured} />
+                </footer>
+              </blockquote>
             </div>
-          ))}
-        </div>
+
+            {/* Accento verticale gold */}
+            <div
+              aria-hidden="true"
+              className="hidden lg:block w-[3px] bg-brand-gold/30 self-stretch"
+            />
+          </div>
+        )}
+
+        {/* ── Altre testimonial — scroll orizzontale ────────────── */}
+        {rest.length > 0 && (
+          <>
+            <p className="text-white/30 text-xs uppercase tracking-widest mb-6">
+              {rest.length} {t.more}
+            </p>
+            <div className="flex gap-6 overflow-x-auto pb-4 -mx-6 px-6 md:-mx-12 md:px-12 snap-x snap-mandatory scrollbar-none">
+              {rest.map((item) => (
+                <article
+                  key={item._id}
+                  className="shrink-0 w-72 bg-white/5 border border-white/10 p-6 snap-start"
+                >
+                  <StarRating />
+                  <p className="text-white/70 text-sm font-light leading-relaxed mt-4 mb-6 line-clamp-4">
+                    {item.review}
+                  </p>
+                  <div className="flex items-center gap-3 pt-4 border-t border-white/10">
+                    <Avatar testimonial={item} />
+                    <AuthorInfo t={item} />
+                  </div>
+                </article>
+              ))}
+            </div>
+          </>
+        )}
+
       </div>
     </section>
   )
