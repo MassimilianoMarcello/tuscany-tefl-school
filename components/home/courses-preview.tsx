@@ -1,123 +1,181 @@
 // components/home/courses-preview.tsx
-import Image from "next/image"
-import Link from "next/link"
-import { format } from "date-fns"
-import { it, enUS } from "date-fns/locale"
-import { Clock, Calendar, Trophy } from "lucide-react"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import type { Course } from "@/lib/sanity.queries"
+import Link from "next/link";
+import { format } from "date-fns";
+import { it, enUS } from "date-fns/locale";
+import { Calendar, Clock, BadgeEuro } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { SanityImage } from "@/components/ui/sanity-image";
+import type { Course } from "@/lib/sanity.queries";
 
 interface CoursesPreviewProps {
-  courses: Course[]
-  locale: string
+  courses: Course[];
+  locale: string;
 }
 
+const labels = {
+  it: {
+    eyebrow: "Corsi in evidenza",
+    hours: "ore",
+    completion: "Durata",
+    weeks: "settimane",
+    details: "Scopri il corso",
+    allCourses: "Tutti i corsi",
+    panelEyebrow: "Certificazione TEFL",
+    panelTitle: "Inizia il tuo percorso di insegnamento con TEFL Tuscany",
+    panelBody:
+      "Programmi TEFL e TESOL pensati per chi vuole insegnare nel mondo, in presenza o da remoto.",
+  },
+  en: {
+    eyebrow: "Featured courses",
+    hours: "hours",
+    completion: "Duration",
+    weeks: "weeks",
+    details: "Course details",
+    allCourses: "All courses",
+    panelEyebrow: "TEFL Certification",
+    panelTitle: "Elevate your teaching career with TEFL Tuscany",
+    panelBody:
+      "TEFL and TESOL programs designed for educators who want to teach anywhere in the world, in-person or remotely.",
+  },
+};
+
 export function CoursesPreview({ courses, locale }: CoursesPreviewProps) {
-  const latest = courses.slice(0, 4)
-  const dateLocale = locale === "it" ? it : enUS
+  const latest = courses.slice(0, 4);
+  const dateLocale = locale === "it" ? it : enUS;
+  const t = locale === "it" ? labels.it : labels.en;
+
+  if (latest.length === 0) return null;
 
   return (
-    <section className="w-full bg-white py-12">
-      <div className="max-w-7xl mx-auto px-4 md:px-8 flex flex-col md:flex-row gap-8">
+    <section className="w-full bg-brand-bg py-24 lg:py-40">
+<div className="max-w-7xl mx-auto px-6 md:px-12 flex flex-col md:flex-row md:items-start gap-12 lg:gap-16">
+        {/* ── Colonna card ──────────────────────────────────────── */}
+        <div className="w-full md:w-3/5 flex flex-col gap-8">
+          {/* Eyebrow */}
+          <p className="text-brand-green uppercase tracking-[0.25em] text-xs font-bold">
+            {t.eyebrow}
+          </p>
 
-        {/* Left — course cards */}
-        <div className="w-full md:w-1/2 flex flex-col gap-12">
           {latest.map((course) => (
-            <div
+            <article
               key={course._id}
-              className="relative rounded-xl overflow-hidden border border-gray-200 shadow-md"
+              className="group relative bg-white overflow-hidden border border-brand-azure/30"
             >
-              {/* Image */}
-              <div className="relative">
-                {course.photo && (
-                  <Image
-                    src={course.photo}
+              {/* Immagine dominante */}
+              <div className="relative h-56 overflow-hidden">
+                {course.photo ? (
+                  <SanityImage
+                    asset={course.photo}
                     alt={course.name}
-                    width={600}
-                    height={350}
-                    className="w-full h-56 object-cover"
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    sizes="(max-width: 768px) 100vw, 50vw"
                   />
+                ) : (
+                  <div className="w-full h-full bg-brand-azure/20" />
                 )}
-                {/* Level badge */}
-                <div className="absolute top-0 right-0 translate-x-[17%] translate-y-[45%] rotate-45">
-                  <Badge className="bg-brand-azure text-white px-6 py-1 text-xs rounded-sm">
+
+                {/* Badge livello — angolo top-left, semplice */}
+                {course.level && (
+                  <span className="absolute top-4 left-4 bg-brand-blue text-brand-azure text-xs font-bold uppercase tracking-widest px-3 py-1">
                     {course.level}
-                  </Badge>
-                </div>
-                {/* Hours badge */}
-                <div className="absolute top-6 left-6 bg-brand-blue border-2 border-brand-gold rounded-2xl h-24 w-24 flex flex-col items-center justify-center text-center shadow-lg">
-                  <span className="text-3xl font-black text-brand-gold leading-none">
+                  </span>
+                )}
+
+                {/* Badge ore — cerchio brand-blue con testo gold */}
+                <div className="absolute top-4 right-4 bg-brand-blue border-2 border-brand-gold rounded-full w-16 h-16 flex flex-col items-center justify-center shadow-lg">
+                  <span className="text-xl font-black text-brand-gold leading-none">
                     {course.hours}
                   </span>
-                  <span className="text-brand-azure text-sm font-light">hours</span>
-                  <span className="text-brand-azure text-xs font-light">course</span>
-                </div>
-                {/* Course name overlay */}
-                <div className="border-t-4 border-brand-gold bg-white px-4 py-2 -mt-2">
-                  <p className="text-brand-blue font-black text-xl">{course.name}</p>
-                </div>
-              </div>
-
-              {/* Details */}
-              <div className="px-4 py-4 flex flex-col gap-2">
-                <div className="flex items-center gap-2 text-sm text-gray-500">
-                  <Calendar className="h-4 w-4 text-brand-green" />
-                  <span>
-                    {format(new Date(course.startDate), "dd MMM yyyy", { locale: dateLocale })}
-                    {" → "}
-                    {format(new Date(course.endDate), "dd MMM yyyy", { locale: dateLocale })}
+                  <span className="text-brand-azure text-[9px] font-bold uppercase tracking-wide">
+                    {t.hours}
                   </span>
                 </div>
-                <div className="flex items-center gap-2 text-sm text-gray-500">
-                  <Clock className="h-4 w-4 text-brand-green" />
-                  <span>Completion: {course.completionTimeWeeks} weeks</span>
-                </div>
-                <div className="flex items-center gap-2 text-sm font-semibold text-brand-blue">
-                  <Trophy className="h-4 w-4 text-brand-gold" />
-                  <span>Price: €{course.price}</span>
-                </div>
               </div>
 
-              {/* CTA */}
-              <div className="px-4 pb-4">
+              {/* Info sotto immagine */}
+              <div className="px-6 py-5 border-t-4 border-brand-gold">
+                <h3 className="font-serif-display text-xl text-brand-blue mb-4 leading-snug">
+                  {course.name}
+                </h3>
+
+                <div className="flex flex-col gap-2 mb-5">
+                  <div className="flex items-center gap-2 text-sm text-brand-blue/60">
+                    <Calendar className="h-4 w-4 text-brand-green shrink-0" />
+                    <span>
+                      {format(new Date(course.startDate), "dd MMM yyyy", {
+                        locale: dateLocale,
+                      })}
+                      {" → "}
+                      {format(new Date(course.endDate), "dd MMM yyyy", {
+                        locale: dateLocale,
+                      })}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm text-brand-blue/60">
+                    <Clock className="h-4 w-4 text-brand-green shrink-0" />
+                    <span>
+                      {t.completion}: {course.completionTimeWeeks} {t.weeks}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm font-semibold text-brand-blue">
+                    <BadgeEuro className="h-4 w-4 text-brand-gold shrink-0" />
+                    <span>€{course.price}</span>
+                  </div>
+                </div>
+
                 <Button
                   asChild
-                  className="bg-brand-blue hover:bg-brand-blue-dark text-white uppercase text-xs font-bold tracking-wide"
+                  className="bg-brand-blue hover:bg-brand-blue-dark text-white uppercase tracking-widest text-xs font-bold px-6 py-4 rounded-none w-full"
                 >
                   <Link href={`/${locale}/our_courses/${course.slug}`}>
-                    Details
+                    {t.details}
                   </Link>
                 </Button>
               </div>
-            </div>
+            </article>
           ))}
         </div>
 
-        {/* Right — sticky panel */}
-        <div className="w-full md:w-1/2 md:sticky md:top-16 md:self-start">
-          <div className="rounded-3xl bg-white border border-gray-100 shadow-sm overflow-hidden">
-            <div className="bg-brand-blue p-6">
-              <h2 className="text-2xl md:text-3xl font-black text-white leading-snug">
-                Elevate your teaching career with TEFL Tuscany
-              </h2>
-            </div>
-            <div className="p-6">
-              <p className="text-brand-blue text-base leading-relaxed">
-                Our extensive TEFL courses are tailored to empower instructors
-                from various walks of life, whether you are aiming to teach
-                remotely or set off on a globetrotting educational expedition.
+     {/* ── Pannello ───────────────────────────────────────────── */}
+<div className="w-full md:w-2/5 md:sticky md:top-24" style={{ alignSelf: "flex-start" }}>
+  <div className="bg-brand-blue overflow-hidden">
+            {/* Fascia gold top */}
+            <div className="h-[6px] bg-brand-gold w-full" />
+
+            <div className="px-8 py-10">
+              <p className="text-brand-azure uppercase tracking-[0.25em] text-xs font-bold mb-6">
+                {t.panelEyebrow}
               </p>
+              <h2 className="font-serif-display text-3xl md:text-4xl text-white leading-[1.15] mb-6">
+                {t.panelTitle}
+              </h2>
+              <div className="w-12 h-[3px] bg-brand-gold mb-6" />
+              <p className="text-white/60 text-base font-light leading-relaxed mb-10">
+                {t.panelBody}
+              </p>
+
+              {/* Contatore corsi disponibili */}
+              <div className="border-t border-white/10 pt-6 mb-10 flex items-baseline gap-3">
+                <span className="font-serif-display text-5xl text-brand-gold">
+                  {courses.length}
+                </span>
+                <span className="text-white/50 text-sm uppercase tracking-widest">
+                  {locale === "it" ? "corsi disponibili" : "courses available"}
+                </span>
+              </div>
+
               <Link
                 href={`/${locale}/our_courses`}
-                className="inline-block mt-6 text-sm font-black uppercase tracking-widest text-brand-blue border-b-2 border-brand-azure pb-1 hover:text-brand-green hover:border-brand-green transition-colors"
+                className="inline-flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-brand-gold border-b-2 border-brand-gold pb-1 hover:text-white hover:border-white transition-colors"
               >
-                All courses &gt;
+                {t.allCourses}
+                <span aria-hidden="true">→</span>
               </Link>
             </div>
           </div>
         </div>
       </div>
     </section>
-  )
+  );
 }
