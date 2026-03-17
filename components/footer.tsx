@@ -47,7 +47,7 @@ export function Footer() {
   return (
     <footer className="w-full bg-brand-blue">
       {/* Fascia gold top */}
-      <div className="h-[6px] w-full bg-brand-gold" />
+      <div className="h-1.5 w-full bg-brand-gold" />
 
       <div className="max-w-7xl mx-auto px-6 md:px-12 py-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12">
         
