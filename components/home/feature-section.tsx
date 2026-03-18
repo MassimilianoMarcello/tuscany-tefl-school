@@ -1,23 +1,22 @@
-// components/home/feature-section.tsx
-import Link from "next/link"
-import { PortableText, type PortableTextBlock } from "@portabletext/react"
-import type { HomePage } from "@/lib/sanity.queries"
-import { Button } from "@/components/ui/button"
-import { SanityImage } from "@/components/ui/sanity-image"
-import { AnimateIn } from "@/components/ui/animate-in"
+import Link from "next/link";
+import type { HomePage } from "@/lib/sanity.queries";
+import { Button } from "@/components/ui/button";
+import { SanityImage } from "@/components/ui/sanity-image";
+import { AnimateIn } from "@/components/ui/animate-in";
+import { getTranslations } from "next-intl/server";
 
 interface FeatureSectionProps {
-  data: HomePage
-  locale: string
+  data: HomePage;
+  locale: string;
 }
 
-export function FeatureSection({ data, locale }: FeatureSectionProps) {
-  const feature = data.components?.[0]
-  if (!feature) return null
+export async function FeatureSection({ data, locale }: FeatureSectionProps) {
+  const t = await getTranslations("featureSection");
+
+  const featureImage = data.components?.[0]?.image;
 
   return (
     <section className="w-full grid grid-cols-1 lg:grid-cols-2 min-h-150">
-
       {/* ── Colonna immagine (sinistra) ───────────────────────── */}
       <AnimateIn
         variant="fadeRight"
@@ -26,12 +25,12 @@ export function FeatureSection({ data, locale }: FeatureSectionProps) {
         threshold={0.15}
         className="relative h-72 lg:h-auto overflow-hidden bg-brand-blue"
       >
-        {feature.image ? (
+        {featureImage ? (
           <SanityImage
-            asset={feature.image}
-            alt={feature.title ?? "Feature"}
+            asset={featureImage}
+            alt={t("title")}
             fill
-            className="object-cover py-20 object-[-25%_center] lg:object-[-11%_center]"
+            className="object-cover p-10 my-4"
             sizes="(max-width: 1024px) 100vw, 50vw"
           />
         ) : (
@@ -48,13 +47,13 @@ export function FeatureSection({ data, locale }: FeatureSectionProps) {
 
         <AnimateIn variant="fadeUp" delay={100} duration={500} threshold={0.15}>
           <p className="text-brand-azure uppercase tracking-[0.25em] text-xs font-bold mb-5">
-            Our Approach
+            {t("eyebrow")}
           </p>
         </AnimateIn>
 
         <AnimateIn variant="fadeUp" delay={200} duration={600} threshold={0.15}>
           <h2 className="font-serif-display text-4xl md:text-5xl xl:text-6xl text-white leading-[1.1] mb-6">
-            {feature.title}
+            {t("title")}
           </h2>
         </AnimateIn>
 
@@ -62,17 +61,11 @@ export function FeatureSection({ data, locale }: FeatureSectionProps) {
           <div aria-hidden="true" className="w-16 h-[3px] bg-brand-gold mb-8" />
         </AnimateIn>
 
-        {feature.text && (
-          <AnimateIn variant="fadeUp" delay={400} duration={600} threshold={0.15}>
-            <div className="text-base md:text-lg text-white/70 font-light leading-relaxed mb-10 max-w-md [&_p]:mb-3">
-              {Array.isArray(feature.text) ? (
-                <PortableText value={feature.text as PortableTextBlock[]} />
-              ) : (
-                <p>{feature.text as string}</p>
-              )}
-            </div>
-          </AnimateIn>
-        )}
+        <AnimateIn variant="fadeUp" delay={400} duration={600} threshold={0.15}>
+          <div className="text-base md:text-lg text-white/70 font-light leading-relaxed mb-10 max-w-md [&_p]:mb-3">
+            <p>{t("text")}</p>
+          </div>
+        </AnimateIn>
 
         <AnimateIn variant="fadeUp" delay={500} duration={600} threshold={0.15}>
           <div>
@@ -80,12 +73,11 @@ export function FeatureSection({ data, locale }: FeatureSectionProps) {
               asChild
               className="bg-transparent border-2 border-brand-gold text-brand-gold hover:bg-brand-gold hover:text-brand-blue uppercase tracking-widest text-xs font-bold px-8 py-5 rounded-none transition-colors duration-200"
             >
-              <Link href={`/${locale}/contact`}>Book a Call</Link>
+              <Link href={`/${locale}/contact`}>{t("cta.call")}</Link>
             </Button>
           </div>
         </AnimateIn>
-
       </div>
     </section>
-  )
+  );
 }
