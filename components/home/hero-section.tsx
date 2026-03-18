@@ -1,52 +1,68 @@
-// components/home/hero-section.tsx
 import Link from "next/link"
-import { PortableText, type PortableTextBlock } from "@portabletext/react"
 import { SanityImage } from "@/components/ui/sanity-image"
 import type { HomePage } from "@/lib/sanity.queries"
 import { Button } from "@/components/ui/button"
 import { AnimateIn } from "@/components/ui/animate-in"
+import { getTranslations } from "next-intl/server"
 
 interface HeroSectionProps {
   data: HomePage
   locale: string
 }
 
-export function HeroSection({ data, locale }: HeroSectionProps) {
+export async function HeroSection({ data, locale }: HeroSectionProps) {
+  const t = await getTranslations("hero")
+
   return (
-    <div style={{ paddingBottom: "5rem" }} className="bg-brand-bg w-full">
-      <section className="relative w-full min-h-svh grid grid-cols-1 lg:grid-cols-2 overflow-hidden">
+    <div className="pb-20 bg-brand-bg w-full">
+      <section
+        aria-label="Hero"
+        className="relative w-full min-h-svh grid grid-cols-1 lg:grid-cols-2 overflow-hidden"
+      >
 
         {/* ── Colonna testo (sinistra) ─────────────────────────────── */}
-        <div className="relative flex flex-col justify-center bg-brand-bg px-10 md:px-16 lg:px-20 py-20 lg:py-32 order-2 lg:order-1">
+        <div className="relative flex flex-col justify-center bg-brand-bg px-10 md:px-16 lg:px-20 py-20 lg:py-32 order-2 lg:order-1 overflow-hidden">
           <span aria-hidden="true" className="absolute left-0 top-0 bottom-0 w-1.5 bg-brand-gold" />
+
+          {/* Vignette radiale navy — angolo top-right */}
+          <span
+            aria-hidden="true"
+            className="pointer-events-none absolute -top-16 -right-16 w-64 h-64 rounded-full"
+            style={{
+              background: "radial-gradient(circle, rgba(26,44,78,0.07) 0%, transparent 70%)",
+            }}
+          />
+
+          {/* Vignette radiale gold — angolo bottom-left */}
+          <span
+            aria-hidden="true"
+            className="pointer-events-none absolute -bottom-12 left-8 w-48 h-48 rounded-full"
+            style={{
+              background: "radial-gradient(circle, rgba(201,168,76,0.09) 0%, transparent 70%)",
+            }}
+          />
 
           <AnimateIn variant="fadeUp" delay={0} duration={500}>
             <p className="text-brand-green uppercase tracking-[0.25em] text-xs font-bold mb-5">
-              TEFL Certification · Tuscany, Italy
+              {t("badge")}
             </p>
           </AnimateIn>
 
           <AnimateIn variant="fadeUp" delay={100} duration={600}>
             <h1 className="font-serif-display text-5xl md:text-6xl xl:text-7xl text-brand-blue leading-[1.1] mb-6">
-              {data.mainTitle}
+              {t("mainTitle")}
             </h1>
           </AnimateIn>
 
           <AnimateIn variant="fadeUp" delay={200} duration={400}>
-            <div aria-hidden="true" className="w-16 h-[3px] bg-brand-gold mb-8" />
+            <div aria-hidden="true" className="w-16 h-0.75 bg-brand-gold mb-8" />
           </AnimateIn>
 
-          {data.mainText && (
-            <AnimateIn variant="fadeUp" delay={300} duration={600}>
-              <div className="text-base md:text-lg text-brand-blue/70 font-light leading-relaxed mb-10 max-w-sm [&_p]:mb-2">
-                {Array.isArray(data.mainText) ? (
-                  <PortableText value={data.mainText as PortableTextBlock[]} />
-                ) : (
-                  <p>{data.mainText as string}</p>
-                )}
-              </div>
-            </AnimateIn>
-          )}
+          <AnimateIn variant="fadeUp" delay={300} duration={600}>
+            <div className="text-base md:text-lg text-brand-blue/70 font-light leading-relaxed mb-10 max-w-sm [&_p]:mb-2">
+              <p>{t("mainText")}</p>
+            </div>
+          </AnimateIn>
 
           <AnimateIn variant="fadeUp" delay={400} duration={600}>
             <div className="flex gap-3 flex-wrap">
@@ -54,23 +70,17 @@ export function HeroSection({ data, locale }: HeroSectionProps) {
                 asChild
                 className="bg-brand-green hover:bg-brand-green-dark text-white uppercase tracking-widest text-xs font-bold px-8 py-5 rounded-none"
               >
-                <Link href={`/${locale}/our_courses`}>Explore Courses</Link>
+                <Link href={`/${locale}/our_courses`}>{t("cta.courses")}</Link>
               </Button>
               <Button
                 asChild
                 variant="outline"
                 className="border-2 border-brand-blue text-brand-blue hover:bg-brand-blue hover:text-brand-bg uppercase tracking-widest text-xs font-bold px-8 py-5 rounded-none transition-colors duration-200"
               >
-                <Link href={`/${locale}/apply`}>Apply Now</Link>
+                <Link href={`/${locale}/apply`}>{t("cta.apply")}</Link>
               </Button>
             </div>
           </AnimateIn>
-
-          {/* <AnimateIn variant="fade" delay={600} duration={800}>
-            <p className="absolute bottom-6 left-10 md:left-16 text-xs text-brand-blue/40 uppercase tracking-widest">
-              Est. 2006
-            </p>
-          </AnimateIn> */}
         </div>
 
         {/* ── Colonna immagine (destra) ────────────────────────────── */}
@@ -84,11 +94,10 @@ export function HeroSection({ data, locale }: HeroSectionProps) {
             <>
               <SanityImage
                 asset={data.bannerImage}
-                alt={data.mainTitle ?? "TEFL Tuscany"}
+                alt={t("mainTitle")}
                 fill
                 priority
-                className="object-cover"
-                style={{ objectPosition: "95% center" }}
+                className="object-cover pt-6"
                 sizes="(max-width: 1024px) 100vw, 50vw"
               />
               <div
@@ -104,7 +113,7 @@ export function HeroSection({ data, locale }: HeroSectionProps) {
           ) : (
             <div className="w-full h-full bg-brand-azure/20 flex items-center justify-center">
               <span className="text-brand-blue/30 font-serif-display text-3xl italic">
-                Tuscany
+                {t("imageFallback")}
               </span>
             </div>
           )}
