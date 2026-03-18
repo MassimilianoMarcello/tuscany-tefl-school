@@ -128,6 +128,7 @@
       "users": "Utenti",
       "content": "Gestione Contenuti"
     },
+ 
     "overview": {
       "title": "Panoramica",
       "totalUsers": "Utenti totali",
@@ -148,6 +149,7 @@
       "roleUpdated": "Ruolo aggiornato con successo."
     }
   },
+  
   "navigation": {
     "switchLanguage": "English",
     "home": "Home",
@@ -255,5 +257,35 @@
     "fieldReview": "La tua esperienza *",
     "fieldRating": "Valutazione",
     "eyebrow": "Storie degli studenti"
+  },
+  "hero": {
+    "mainTitle": "Insegna l'inglese nel cuore dell'Italia",
+    "mainText": "Programmi TEFL immersi nelle colline toscane.",
+    "badge": "Certificazione TEFL · Toscana, Italia",
+    "imageFallback": "Toscana",
+    "cta": {
+      "courses": "Scopri i corsi",
+      "apply": "Candidati ora"
+    }
+  },
+  
+"featureSection": {
+    "eyebrow": "Il Nostro Approccio",
+    "title": "L'Istituto TEFL TUSCANY",
+    "text": "Scopri un portale per immergerti in culture diverse, connetterti con persone nuove e lasciare il tuo segno mentre viaggi o lavori da lontano. Che tu voglia una svolta professionale o i fondi per alimentare la tua voglia di viaggiare, i nostri programmi TEFL offrono la strada ideale. Abbraccia questa opportunità unica nel cuore dell'Italia e inizia la tua avventura! Prenota subito una chiamata informativa, saremo felici di rispondere a tutte le tue domande.",
+    "imageFallback": "Immagine",
+    "cta": {
+      "call": "Prenota una chiamata"
+    }
+  },
+  "aboutSection": {
+    "eyebrow": "Dal 2006 · Firenze, Italia",
+    "title": "TEFL Tuscany",
+    "tagline": "La lingua che apre il mondo,\nConnettendo le Culture.",
+    "text": "TEFL Tuscany offre programmi di certificazione TEFL di alto livello dal 2006, diventando rapidamente un rinomato centro linguistico e culturale nel cuore di Firenze.",
+    "cta": "Cosa ci distingue"
   }
+
 }
+
+

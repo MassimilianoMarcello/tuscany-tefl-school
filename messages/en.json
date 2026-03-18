@@ -128,6 +128,8 @@
       "users": "Users",
       "content": "Content Management"
     },
+  
+  
     "overview": {
       "title": "Overview",
       "totalUsers": "Total users",
@@ -146,6 +148,16 @@
       "makeUser": "Demote to User",
       "promoting": "Updating...",
       "roleUpdated": "Role updated successfully."
+    }
+  },
+  "hero": {
+    "mainTitle": "Teach English in the Heart of Italy",
+    "mainText": "Immersive TEFL programs in the rolling hills of Tuscany.",
+    "badge": "TEFL Certification · Tuscany, Italy",
+    "imageFallback": "Tuscany",
+    "cta": {
+      "courses": "Explore Courses",
+      "apply": "Apply Now"
     }
   },
   "navigation": {
@@ -255,5 +267,24 @@
     "fieldReview": "Your experience *",
     "fieldRating": "Rating",
     "eyebrow": "Student Stories"
+  },
+  
+  "featureSection": {
+    "eyebrow": "Our Approach",
+    "title": "The TEFL TUSCANY Institute",
+    "text": "Discover a portal to immerse yourself in diverse cultures, connect with unfamiliar faces, and leave your mark as you journey or work from afar. Whether you crave a professional shift or crave the funds to fuel your wanderlust, our TEFL programs offer the ideal avenue. Embrace this unique opportunity in the heart of Italy and embark on your life-changing adventure! Book a quick informational call now, and we'll be happy to answer all of your questions.",
+    "imageFallback": "Feature",
+    "cta": {
+      "call": "Book a Call"
+    }
+  },
+  "aboutSection": {
+    "eyebrow": "Since 2006 · Florence, Italy",
+    "title": "TEFL Tuscany",
+    "tagline": "Unlocking Language,\nConnecting Cultures.",
+    "text": "TEFL Tuscany has been offering top-notch TEFL certification programs since 2006, quickly growing into a well-respected language and culture center in the heart of Florence.",
+    "cta": "What sets us apart"
   }
+
+
 }
