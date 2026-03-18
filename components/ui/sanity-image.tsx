@@ -1,4 +1,3 @@
-// components/ui/sanity-image.tsx
 import { urlFor } from "@/lib/sanity.client"
 import NextImage from "next/image"
 
@@ -28,9 +27,16 @@ export function SanityImage({
   sizes,
   quality = 85,
 }: SanityImageProps) {
+  const hotspotX = asset?.hotspot?.x
+  const hotspotY = asset?.hotspot?.y
+  const objectPosition =
+    hotspotX != null && hotspotY != null
+      ? `${hotspotX * 100}% ${hotspotY * 100}%`
+      : "center"
+
   const src = fill
-    ? urlFor(asset).quality(quality).url()
-    : urlFor(asset).width(width ?? 800).quality(quality).url()
+    ? urlFor(asset).auto("format").quality(quality).url()
+    : urlFor(asset).width(width ?? 800).height(height ?? 600).fit("crop").auto("format").quality(quality).url()
 
   const blurSrc = urlFor(asset).width(20).quality(20).url()
 
@@ -45,7 +51,7 @@ export function SanityImage({
         placeholder="blur"
         blurDataURL={blurSrc}
         className={className}
-        style={style}
+        style={{ objectPosition, ...style }}
         sizes={sizes ?? "100vw"}
       />
     )

@@ -124,13 +124,43 @@ export type HomePage = {
   _id: string;
   mainTitle: string;
   mainText: PortableTextBlock[] | string;
-  bannerImage: string;
-  components: {
-    _key: string;
-    title: string;
-    text: string;
-    image: string;
-  }[];
+ bannerImage: {
+  asset: {
+    _id: string
+    url: string
+    metadata?: {
+      dimensions: { width: number; height: number }
+    }
+  }
+  crop?: {
+    top: number
+    bottom: number
+    left: number
+    right: number
+  }
+  hotspot?: {
+    x: number
+    y: number
+    width: number
+    height: number
+  }
+};
+ components: {
+    _key: string
+    title: string
+    text: string
+    image: {
+      asset: {
+        _id: string
+        url: string
+        metadata?: {
+          dimensions: { width: number; height: number }
+        }
+      }
+      crop?: { top: number; bottom: number; left: number; right: number }
+      hotspot?: { x: number; y: number; width: number; height: number }
+    }
+  }[]
 };
 
 // ─── CommonTopPage queries ────────────────────────────────────────────────────
@@ -370,12 +400,20 @@ export async function getHomePage(): Promise<HomePage | null> {
       _id,
       mainTitle,
       mainText,
-      "bannerImage": bannerImage.asset->url,
+      bannerImage {
+  asset->,
+  crop,
+  hotspot
+},
       components[]{
         _key,
         title,
         text,
-        "image": image.asset->url
+         image {
+          asset->,
+          crop,
+          hotspot
+        }
       }
     }`,
   );
