@@ -25,7 +25,7 @@ export function CourseCard({ course, locale }: CourseCardProps) {
       <div className="relative">
         {course.photo ? (
           <Image
-            src={course.photo}
+            src={course.photo.asset.url}
             alt={course.name}
             width={600}
             height={350}
