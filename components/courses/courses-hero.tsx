@@ -1,6 +1,8 @@
 // components/courses/courses-hero.tsx
 import Image from "next/image"
-import type { CommonTopPage } from "@/lib/sanity.queries"
+import { getCommonTopPages } from "@/lib/sanity.queries"
+
+type CommonTopPage = Awaited<ReturnType<typeof getCommonTopPages>>[number]
 
 interface CoursesHeroProps {
   locale: string
