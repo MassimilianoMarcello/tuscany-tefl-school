@@ -42,7 +42,7 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
       <div className="relative w-full h-64 md:h-96 overflow-hidden">
         {course.photo ? (
           <Image
-            src={course.photo}
+            src={course.photo.asset.url}
             alt={course.name}
             fill
             className="object-cover"
